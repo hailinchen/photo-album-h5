@@ -33,7 +33,7 @@ export default {
 <style lang="scss" scope>
 .header {
   height: 88px;
-  position: fixed;
+  position: relative;
   width: 100%;
   z-index: 2;
 

@@ -1,15 +1,14 @@
 <template>
   <div class="home">
-    <Header/>
+    <Header />
     <div class="main">
       <FeedList />
     </div>
-    <Footer/>
+    <Footer />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import FeedList from '../components/Home/FeedList'
 import Header from '../components/Common/Header'
 import Footer from '../components/Common/Footer'
@@ -32,6 +31,9 @@ export default {
   aspect-ratio: '188:246';
 }
 .main {
-  padding-top: 88px;
+  width: 100%;
+  position: fixed;
+  top: 88px;
+  bottom: 98px;
 }
 </style>

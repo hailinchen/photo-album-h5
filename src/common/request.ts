@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosResponse, AxiosRequestConfig, AxiosPromise } from 'axios';
 import env from '../config/env';
 import { getOS, getCache } from '../common/utils';
 import md5 from 'crypto-js/md5';
+
 /**
  * 自定义axios实例
  */
@@ -14,19 +15,19 @@ const AJAX = axios.create({
 /**
  * 添加请求拦截器
  */
-AJAX.interceptors.request.use((config) => {
+AJAX.interceptors.request.use((config: AxiosRequestConfig) => {
   return config;
-}, (error) => {
+}, (error: any) => {
   return Promise.reject(error);
 });
 
 /**
  * 请求响应拦截器
  */
-AJAX.interceptors.response.use((response) => {
+AJAX.interceptors.response.use((response: AxiosResponse) => {
   // 对响应数据做点什么
-  return response.data;
-}, (error) => {
+  return response.data
+}, (error: any) => {
   // 对响应错误做点什么，比如400、401、402等等
   if (error && error.response) {
     console.log(error.response);
@@ -73,7 +74,7 @@ export default {
       },
     );
   },
-  post(url: string, params: object = {}, headers: object = {}) {
+  post(url: string, params: object = {}, headers: object = {}): AxiosPromise {
     return AJAX.post(url, params, { headers: { ...getHeader(url, headers) } });
   },
   put(url: string, params: object = {}, headers = {}) {
