@@ -1,18 +1,28 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <ul v-for="(item, index) in feedList" :key="item.value && item.value.post !== null ? item.value.post.post_id : index">
+      <template v-if="item.value && item.value.post !== null">
+        <li>{{item.value.post.title}}</li>
+      </template>
+    </ul>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import { mapActions, mapGetters } from 'vuex';
 export default {
   name: 'Home',
-  components: {
-    HelloWorld
-  }
-}
+  computed: {
+    ...mapGetters({
+      feedList: 'feedList',
+    }),
+  },
+  methods: {
+    ...mapActions(['getFeedList']),
+  },
+  created() {
+    this.$store.dispatch('getFeedList');
+  },
+};
 </script>
