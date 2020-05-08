@@ -35,7 +35,9 @@ const mutations = {
 };
 
 const getters = {
-  feedList: (state: State) => state.feedList,
+  feedList: (state: State) => (
+    state.feedList.map((item) => Object.assign({}, { card_type: item.card_type}, {...item.value}))
+  ),
 };
 
 export default {
