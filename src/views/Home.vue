@@ -1,8 +1,13 @@
 <template>
   <div class="home">
-    <ul v-for="(item, index) in feedList" :key="item.value && item.value.post !== null ? item.value.post.post_id : index">
+    <ul
+      v-for="(item, index) in feedList"
+      :key="
+        item.value && item.value.post !== null ? item.value.post.post_id : index
+      "
+    >
       <template v-if="item.value && item.value.post !== null">
-        <li>{{item.value.post.title}}</li>
+        <li>{{ item.value.post.title }}</li>
       </template>
     </ul>
   </div>
@@ -10,7 +15,8 @@
 
 <script>
 // @ is an alias to /src
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   name: 'Home',
   computed: {
@@ -22,7 +28,12 @@ export default {
     ...mapActions(['getFeedList']),
   },
   created() {
-    this.$store.dispatch('getFeedList');
+    this.$store.dispatch('getFeedList')
   },
-};
+}
 </script>
+
+
+<style lang="scss" scope>
+  
+</style>

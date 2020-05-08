@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
   components: {
@@ -14,5 +14,7 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class App extends Vue {}
 </script>
 
-<style lang="less">
+<style lang="scss">
+@import './style/reset.scss';
+@import './style/normalize.scss';
 </style>
