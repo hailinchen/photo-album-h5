@@ -33,7 +33,24 @@ export default {
 }
 </script>
 
-
 <style lang="scss" scope>
-  
+[w-188-246] {
+  width: 188px;
+}
+[w-188-246] {
+  aspect-ratio: '188:246';
+}
+
+@svg 1px-border {
+    height: 2px;
+    @rect {
+        fill: var(--color, black);
+        width: 100%;
+        height: 50%;
+    }
+}
+.example {
+  border: 1px solid transparent;
+  border-image: svg(1px-border param(--color #00b1ff)) 2 2 stretch;
+}
 </style>

@@ -11,6 +11,9 @@
     "@types/crypto-js": "^3.1.45",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "postcss-aspect-ratio-mini": "^1.0.1",
+    "postcss-px-to-viewport": "^1.1.1",
+    "postcss-write-svg": "^3.0.1",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^8.4.1",
@@ -23,6 +26,7 @@
     "@vue/cli-service": "^4.3.0",
     "crypto-js": "^4.0.0",
     "node-sass": "^4.14.1",
+    "postcss": "^7.0.29",
     "sass-loader": "^8.0.2",
     "typescript": "~3.8.3",
     "vue-template-compiler": "^2.6.11"

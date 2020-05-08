@@ -40,7 +40,6 @@ module.exports = {
       .set('@', resolve('src'))
       .set('@assets', resolve('src/assets'))
       .set('@components', resolve('src/components'))
-      .set('@style', resolve('src/style'))
     // 移除 prefetch 插件，减少首屏加载
     config.plugins.delete('prefetch')
   },
@@ -50,7 +49,7 @@ module.exports = {
         // 全局使用的一些scss样式
         sass: {
           prependData: `
-            @import "@style/mixin.scss";
+            @import "~@/style/mixin.scss";
             `
         }
     }

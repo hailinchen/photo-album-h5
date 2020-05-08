@@ -17,4 +17,5 @@ export default class App extends Vue {}
 <style lang="scss">
 @import './style/reset.scss';
 @import './style/normalize.scss';
+@import './style/common.scss';
 </style>
