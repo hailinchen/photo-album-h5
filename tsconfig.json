@@ -14,9 +14,7 @@
     "noImplicitAny": true,
     "suppressExcessPropertyErrors": true,
     "types": [
-      "webpack-env",
-      "./node_modules/@types",
-      "./src/types/",
+      "webpack-env"
     ],
     "paths": {
       "@/*": [

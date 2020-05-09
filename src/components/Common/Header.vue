@@ -1,12 +1,12 @@
 <template>
-  <div class="header" :style="{backgroundColor: bgColor}">
+  <div class="header" :style="{ backgroundColor: bgColor }">
     <img
       class="icon_back"
       v-if="isBack"
-      src="../../assets/icon_back@2x.png"
+      src="../../assets/img/icon_back@2x.png"
       alt="返回"
     />
-    <div class="title">{{title}}</div>
+    <div class="title">{{ title }}</div>
   </div>
 </template>
 
@@ -16,17 +16,17 @@ export default {
   props: {
     isBack: {
       type: Boolean,
-      default: false,
+      default: false
     },
     bgColor: {
       type: String,
-      default: '#D43D3D',
+      default: '#D43D3D'
     },
     title: {
       type: String,
       default: '美脸'
-    },
-  },
+    }
+  }
 }
 </script>
 

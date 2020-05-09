@@ -1,25 +1,25 @@
 <template>
   <div class="home">
-    <Header />
+    <!-- <Header /> -->
     <div class="main">
       <FeedList />
     </div>
-    <Footer />
+    <Tabbar />
   </div>
 </template>
 
 <script>
-import FeedList from '../components/Home/FeedList'
-import Header from '../components/Common/Header'
-import Footer from '../components/Common/Footer'
+import FeedList from '../components/home/FeedList'
+import Header from '../components/common/Header'
+import Tabbar from '../components/common/Tabbar'
 
 export default {
   name: 'Home',
   components: {
     FeedList,
     Header,
-    Footer,
-  },
+    Tabbar
+  }
 }
 </script>
 
@@ -32,8 +32,8 @@ export default {
 }
 .main {
   width: 100%;
-  position: fixed;
-  top: 88px;
+  position: absolute;
+  top: 0;
   bottom: 98px;
 }
 </style>

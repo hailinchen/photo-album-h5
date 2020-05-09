@@ -19,6 +19,8 @@
     "semicolon": [
       false,
       "always"
-    ]
+    ],
+    "trailing-comma": false,
+    "no-unused-expression": false
   }
 }

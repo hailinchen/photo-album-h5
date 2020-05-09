@@ -1,61 +1,271 @@
 <template>
-  <div class="wrapper" ref="wrapper">
-    <ul class="list">
-      <li class="item" v-for="item in feedList" :key="item.post.post_id">
-        {{ item.post.title }}
-      </li>
-    </ul>
-    <div class="loading-wrapper"></div>
-  </div>
+  <cube-page type="scroll-view" class="home" title="美脸">
+    <template slot="content">
+      <!-- S - 顶部导航 -->
+      <div class="nav-scroll-list-wrap">
+        <cube-scroll ref="navScroll" direction="horizontal">
+          <ul class="nav-wrapper">
+            <li v-for="(item, index) in navTxts" :key="index" class="nav-item">
+              {{ item }}
+            </li>
+          </ul>
+        </cube-scroll>
+        <!-- <div class="more-wrapper">
+          <span class="more"></span>
+        </div> -->
+      </div>
+      <!-- E - 顶部导航 -->
+
+      <!-- S - 列表 -->
+      <div class="content-scroll-wrapper">
+        <div class="content-scroll-list-wrap" ref="scrollWrapper">
+          <cube-scroll
+            ref="contentScroll"
+            :data="feedList"
+            :options="options"
+            @pulling-down="onPullingDown"
+            @pulling-up="onPullingUp"
+          >
+            <ul class="list-wrapper">
+              <li
+                class="item"
+                v-for="item in feedList"
+                :key="item.post.post_id"
+              >
+                <div class="item_top">
+                  <h2>{{ item.post.title }}</h2>
+                  <img class="cover_img" :src="item.post.conver_url" alt="">
+                  <span class="play_count">{{item.post.play_count}}次</span>
+                </div>
+                <div class="item_bottom">
+                  <img class="avatar" :src="item.user.user_icon" alt="">
+                  <span class="name">{{item.user.name}}</span>
+                  <span class="like_count">{{item.post.like_count}}</span>
+                  <span class="comment_count">{{item.post.comment_count}}</span>
+                </div>
+              </li>
+            </ul>
+
+            <template slot="pulldown" slot-scope="props">
+              <div
+                v-if="props.pullDownRefresh"
+                class="cube-pulldown-wrapper"
+                :style="props.pullDownStyle"
+              >
+                <div
+                  v-if="props.beforePullDown"
+                  class="before-trigger"
+                  :style="{ paddingTop: props.bubbleY + 'px' }"
+                >
+                  <span :class="{ rotate: props.bubbleY > 0 }">↓</span>
+                </div>
+              </div>
+            </template>
+          </cube-scroll>
+        </div>
+      </div>
+      <!-- E - 列表 -->
+    </template>
+  </cube-page>
 </template>
 
-<script lang="ts">
-import { getFeedList } from '../../api/feedList'
-import BScroll from 'better-scroll'
+<script type="text/ecmascript-6">
+import CubePage from '../base/CubePage';
+import { getFeedList } from '../../api/feedList.ts'
+
+const txts = ['推荐', '搞笑', '情感', '广场舞']
 
 export default {
-  data () {
+  components: {
+    CubePage
+  },
+  data() {
     return {
+      options: {
+        pullDownRefresh: {
+          threshold: 60,
+          // stop: 44,
+          stopTime: 1000,
+          txt: '更新成功'
+        },
+        pullUpLoad: true
+      },
+      navTxts: txts,
       feedList: [],
+    }
+  },
+  methods: {
+    onPullingDown() {
+      this._getList()
+    },
+    async onPullingUp() {
+      const result = await getFeedList()
+      if (result) {
+        if (result.Code === 0) {
+          this.feedList = this.feedList.concat(this._formatData(result.Data))
+        }
+      }
+    },
+    async _getList() {
+      const result = await getFeedList()
+      if (result) {
+        if (result.Code === 0) {
+          this.feedList = this._formatData(result.Data)
+          const contentScroll = this.$refs.contentScroll
+          contentScroll.scroll.beforePullDown && contentScroll.refresh()
+          if (result.Data.length === 0) {
+            this.$refs.scroll.forceUpdate()
+          }
+        }
+      }
+    },
+    _formatData(data) {
+      const newList = data
+        .filter((item) => item.value !== null)
+        .map((item) =>
+          Object.assign({}, { card_type: item.card_type }, { ...item.value })
+        )
+      return newList
     }
   },
   created() {
     this._getList()
-    // this.$nextTick(() => {
-    //   this.scroll = new BScroll(document.querySelector('.wrapper'), {
-    //     scrollY: true,
-    //   })
-
-    //   this.scroll.on('touchEnd', (pos) => {
-    //     // 下拉动作
-    //     if (pos.y > 50) {
-    //       console.log('===')
-          
-    //     }
-    //   })
-    // })
-  },
-  methods: {
-    _getList () {
-      getFeedList().then(data => {
-        console.log(data)
-      })
-    }
-  },
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.list {
-  .item {
+.home {
+  .content {
+    margin: 0 !important;
+    height: 100%;
     display: flex;
-    flex-direction: column;
-    height: 400px;
+    flex-flow: column;
+    > header {
+      line-height: 0;
+      img {
+        width: 100%;
+      }
+    }
+    footer {
+      line-height: 0;
+      img {
+        width: 100%;
+      }
+    }
   }
-}
-
-.wrapper {
-  height: 100%;
-  overflow: hidden;
+  .nav-scroll-list-wrap {
+    transform: rotate(0deg); // fix 子元素超出边框圆角部分不隐藏的问题
+    position: fixed;
+    width: 100%;
+    background-color: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    height: 88px;
+    line-height: 88px;
+    z-index: 1;
+    .cube-scroll-content {
+      display: inline-block;
+      .nav-wrapper {
+        display: inline-block;
+        white-space: nowrap;
+        line-height: 36px;
+        padding: 0 5px;
+      }
+      .nav-item {
+        display: inline-block;
+        padding: 0 24px;
+        &:nth-child(1) {
+          color: #fa7b7a;
+        }
+      }
+    }
+    .more-wrapper {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 1;
+      background-color: #fff;
+      opacity: 0.95;
+      .more {
+        display: inline-block;
+        height: 1px;
+        width: 20px;
+        padding: 5px 0;
+        border: 1px solid #000;
+        border-right: transparent;
+        border-left: transparent;
+        background-color: #000;
+        background-clip: content-box;
+        margin: 11px;
+      }
+    }
+  }
+  .content-scroll-wrapper {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 88px);
+    top: 88px;
+    .content-scroll-list-wrap {
+      width: 100%;
+      height: 100%;
+      transform: rotate(0deg); // fix 子元素超出边框圆角部分不隐藏的问题
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      overflow: hidden;
+      .imgs-wrapper {
+        .imgs-item {
+          > img {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+  .cube-pulldown-wrapper {
+    text-align: center;
+    .before-trigger {
+      height: auto;
+      font-size: 30px;
+      align-self: flex-end;
+      span {
+        display: inline-block;
+        line-height: 1;
+        transition: all 0.3s;
+        color: #666;
+        padding: 15px 0;
+        &.rotate {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+  .after-trigger {
+    flex: 1;
+    margin: 0;
+    .text-wrapper {
+      margin: 0 auto;
+      margin-top: 14px;
+      padding: 5px 0;
+      color: #498ec2;
+      background-color: #d6eaf8;
+    }
+    .cube-loading-spinners {
+      margin: auto;
+    }
+  }
+  .success-enter-active,
+  .success-leave-active {
+    transition: width 0.5s;
+  }
+  .success-enter,
+  .success-leave-to {
+    width: 70%;
+  }
+  .success-enter-to,
+  .success-leave {
+    width: 100%;
+  }
 }
 </style>

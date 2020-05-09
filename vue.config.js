@@ -1,4 +1,6 @@
 const path = require('path');
+const PostCompilePlugin = require('webpack-post-compile-plugin');
+const TransformModulesPlugin = require('webpack-transform-modules-plugin');
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -36,12 +38,26 @@ module.exports = {
   },
 
   chainWebpack: (config) => {
+    const conf = config.toConfig()
     config.resolve.alias
       .set('@', resolve('src'))
       .set('@assets', resolve('src/assets'))
       .set('@components', resolve('src/components'))
     // 移除 prefetch 插件，减少首屏加载
     config.plugins.delete('prefetch')
+    
+    config
+      .plugin('post-compile')
+      .use(PostCompilePlugin, [{
+        config: {
+          module: {
+            rules: [...conf.module.rules]
+          }
+        }
+      }])
+      .end()
+      .plugin('transform-modules')
+      .use(TransformModulesPlugin)
   },
 
   css: {
@@ -51,6 +67,11 @@ module.exports = {
           prependData: `
             @import "~@/style/mixin.scss";
             `
+        },
+        stylus: {
+          'resolve url': true
+          // 自定义主题场景
+          // import: [path.resolve(__dirname, './src/theme')]
         }
     }
 },

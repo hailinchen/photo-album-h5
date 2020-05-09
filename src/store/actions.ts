@@ -1,8 +1,8 @@
 import { ActionTree } from 'vuex';
-import { State } from './index';
+// import { State } from './index';
 
-const actions: ActionTree<State, any> = {
+// const actions: ActionTree<State, any> = {
 
-};
+// };
 
-export default actions;
+// export default actions;

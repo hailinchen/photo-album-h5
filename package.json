@@ -10,8 +10,8 @@
   "dependencies": {
     "@types/crypto-js": "^3.1.45",
     "axios": "^0.19.2",
-    "better-scroll": "^1.15.2",
     "core-js": "^3.6.4",
+    "cube-ui": "^1.12.38",
     "postcss-aspect-ratio-mini": "^1.0.1",
     "postcss-px-to-viewport": "^1.1.1",
     "postcss-write-svg": "^3.0.1",
@@ -29,12 +29,22 @@
     "node-sass": "^4.14.1",
     "postcss": "^7.0.29",
     "sass-loader": "^8.0.2",
+    "stylus": "^0.54.7",
+    "stylus-loader": "^3.0.2",
     "typescript": "~3.8.3",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "webpack-post-compile-plugin": "^1.0.0",
+    "webpack-transform-modules-plugin": "^0.4.4"
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "transformModules": {
+    "cube-ui": {
+      "transform": "cube-ui/src/modules/${member}",
+      "kebabCase": true
+    }
+  }
 }
