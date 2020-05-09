@@ -26,7 +26,7 @@
             @pulling-down="onPullingDown"
             @pulling-up="onPullingUp"
           >
-            <ul class="list-wrapper">
+            <ul class="list_wrapper">
               <li
                 class="item"
                 v-for="item in feedList"
@@ -266,6 +266,22 @@ export default {
   .success-enter-to,
   .success-leave {
     width: 100%;
+  }
+}
+/* list 
+---------------- */
+.list_wrapper {
+  .item {
+    display: flex;
+    flex-direction: column;
+
+    .item_top {
+      height: 420px;
+      position: relative;
+    }
+    .item_bottom {
+      height: 96px;
+    }
   }
 }
 </style>
