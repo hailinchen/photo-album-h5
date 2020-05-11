@@ -29,7 +29,7 @@ module.exports = {
       '/': {
         target: 'https://api.tapai.tv',
         changeOrigin: true,
-        ws: true,
+        // ws: true,
         // pathRewrite: {
         //   '^/api': ''
         // }

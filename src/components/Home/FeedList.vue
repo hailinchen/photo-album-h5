@@ -32,16 +32,44 @@
                 v-for="item in feedList"
                 :key="item.post.post_id"
               >
-                <div class="item_top">
+                <div
+                  class="item_top"
+                  :style="{
+                    background: `url(${item.post.conver_url}) no-repeat`,
+                    backgroundSize: 'cover',
+                  }"
+                >
+                  <div class="item_top_shadow"></div>
+                  <div class="item_bottom_shadow"></div>
                   <h2>{{ item.post.title }}</h2>
-                  <img class="cover_img" :src="item.post.conver_url" alt="">
-                  <span class="play_count">{{item.post.play_count}}次</span>
+                  <!-- <img :style="{height: `${(750 * item.post.conver_image_height / item.post.conver_image_width)}px`}" class="cover_img" :src="item.post.conver_url" alt="" /> -->
+                  <span class="play_count">{{ item.post.play_count }}次</span>
+                  <span class="play_duration">{{
+                    item.post.play_duration
+                  }}</span>
+                  <img src="../../assets/img/icon_play@2x.png" alt="" class="icon_play">
                 </div>
                 <div class="item_bottom">
-                  <img class="avatar" :src="item.user.user_icon" alt="">
-                  <span class="name">{{item.user.name}}</span>
-                  <span class="like_count">{{item.post.like_count}}</span>
-                  <span class="comment_count">{{item.post.comment_count}}</span>
+                  <img class="avatar" :src="item.user.user_icon" alt="" />
+                  <span class="name">{{ item.user.name }}</span>
+                  <div class="like_count">
+                    <img
+                      class="icon"
+                      src="../../assets/img/icon_like@2x.png"
+                      alt=""
+                    /><span class="count">{{ item.post.like_count }}</span>
+                  </div>
+                  <div class="comment_count">
+                    <img
+                      class="icon"
+                      src="../../assets//img/icon_comment@2x.png"
+                      alt=""
+                    />
+                    <span class="count">{{ item.post.comment_count }}</span>
+                  </div>
+                  <button class="share">
+                    <img src="../../assets/img/icon_home_share@2x.png" alt="" />
+                  </button>
                 </div>
               </li>
             </ul>
@@ -278,9 +306,127 @@ export default {
     .item_top {
       height: 420px;
       position: relative;
+
+      .item_top_shadow {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 136px;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.5) 0%,
+          rgba(0, 0, 0, 0) 100%
+        );
+        z-index: 1;
+      }
+
+      .item_bottom_shadow {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 68px;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 0.5) 100%
+        );
+        z-index: 1;
+      }
+
+      .icon_play {
+        position: absolute;
+        width: 88px;
+        height: 88px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+      }
+
+      h2 {
+        font-size: 40px;
+        color: #ffffff;
+        margin: 16px 0 0 30px;
+        font-weight: 500;
+        z-index: 2;
+      }
+
+      .play_duration {
+        height: 36px;
+        line-height: 36px;
+        text-align: center;
+        position: absolute;
+        right: 20px;
+        bottom: 16px;
+        border-radius: 18px;
+        background-color: rgba($color: #000000, $alpha: 0.5);
+        padding: 0 12px;
+        z-index: 2;
+      }
+
+      .play_count {
+        position: absolute;
+        left: 30px;
+        bottom: 22px;
+        color: #fff;
+        font-size: 24px;
+        z-index: 2;
+      }
     }
     .item_bottom {
       height: 96px;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      position: relative;
+
+      .avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        margin-left: 30px;
+        margin-right: 12px;
+      }
+      .name {
+        font-size: 26px;
+        color: #212121;
+        font-weight: 500;
+        margin-right: 54px;
+      }
+      .like_count {
+        
+      }
+      .comment_count {
+      }
+
+      .like_count,
+      .comment_count {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: 26px;
+        color: #666666;
+        margin-right: 26px;
+
+        .icon {
+          width: 44px;
+          height: 44px;
+          margin-right: 10px;
+        }
+      }
+
+      .share {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+
+        img {
+          width: 132px;
+          height: 56px;
+        }
+      }
     }
   }
 }
