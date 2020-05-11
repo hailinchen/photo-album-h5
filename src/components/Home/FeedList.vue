@@ -31,6 +31,7 @@
                 class="item"
                 v-for="item in feedList"
                 :key="item.post.post_id"
+                @click="goDetail(item.post.post_id)"
               >
                 <div
                   class="item_top"
@@ -123,6 +124,9 @@ export default {
     }
   },
   methods: {
+    goDetail(postId) {
+      this.$router.push('/postDetail/' + postId)
+    },
     onPullingDown() {
       this._getList()
     },
@@ -164,6 +168,9 @@ export default {
 
 <style lang="scss" scoped>
 .home {
+  > .wrapper {
+    height: calc(100% - 88px);
+  }
   .content {
     margin: 0 !important;
     height: 100%;
