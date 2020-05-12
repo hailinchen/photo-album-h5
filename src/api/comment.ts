@@ -1,8 +1,8 @@
 import Request from '../common/request'
 import { baseURL } from './config'
 
-export function getComment(postId: string, lastCommentId: number = 0) {
-  return Request.get(`${baseURL}/post/comment/list/${postId}/${lastCommentId}}`)
+export function getComment(postId: string, lastCommentId: number) {
+  return Request.get(`${baseURL}/post/comment/list/${postId}/${lastCommentId}`)
 }
 
 interface IComment {
@@ -20,6 +20,7 @@ interface IComment {
 interface CommentUser {
   name: string
   uid: number
+  user_icon: string
 }
 interface CommentInfo {
   comment_id: number
@@ -31,6 +32,7 @@ export class Comment {
   protected commentId: number
   protected commentContent: string
   protected name: string
+  protected avatar: string
   protected uid: number
   protected createTime: number
   protected isRes: boolean
@@ -50,6 +52,7 @@ export class Comment {
     this.name = comment.commentator.user.name
     this.createTime = comment.commentator.comment.create_time
     this.uid = comment.commentator.user.uid
+    this.avatar = comment.commentator.user.user_icon
     if (comment.respondent.comment && comment.respondent.user) {
       this.resUid = comment.respondent.user && comment.respondent.user.uid
       this.resName = comment.respondent.user.name

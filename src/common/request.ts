@@ -68,7 +68,7 @@ function getHeader(url: string, headers = {}) {
     'x-device-id': getCache('openid')
       ? getCache('openid')
       : 'A65069FB-C9EE-46CF-A7ED-69FE74125651',
-    'x-access-token': getCache('token')
+    'x-access-token': getCache('token') ? getCache('token') : 'ADYENFA9VzBXZ1ZkUDNQbVUxVGMDYAprV2IFbgcoBHdRbAUzBGoFcVYkAW9db1B3B2sHdwA4XzMGOlYlBmEANgA+BDBQPVc0V2NWc1A9UCZVOFRuAzsKc1cjBTUHPQRgUQkFYwQ/BTdWNAEkXTBQJgdqBzUAMl8+BiJWNwY1AFAAdgRAUFFXdVc5VmBQd1B3VTlUJAM7CmBXYQVuB3EEYVEuBXAEOQUhVjQBdV1UUDwHPgcmADlfbQY6VjUGZwA5ADUEMVA0VzFXa1Ys'
   }
   return Object.assign(header, headers)
 }

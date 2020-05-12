@@ -71,30 +71,23 @@
       <!-- E - 帖子信息 -->
 
       <!-- S - 热门评论 -->
-      <div class="hot_comment" v-if="hotComment.length">
-        <ul>
-          <li
-            class="hot_comment_item"
-            v-for="item in hotComment"
-            :key="item.commentId"
-          >
-            <!-- 没有回复 -->
-            <div v-if="!item.isRes">
-              <span class="name">{{ item.name }}:</span
-              ><span class="content">{{ item.commentContent }}</span>
-            </div>
-            <!-- 有回复 -->
-            <div v-if="item.isRes">
-              <span class="name">{{ item.resName }}</span>
-              <span class="content">回复</span>
-              <span class="name">{{ item.name }}:</span>
-              <span class="content">{{ item.resContent }}</span>
-            </div>
-          </li>
-        </ul>
-        <p class="all_comment_count">查看全部17条评论</p>
-      </div>
+      <HotComments
+        :hotComment="hotComment"
+        :commentCount="postDetail.commentCount"
+        @showAllComment="handleShowAllComment"
+      />
       <!-- E - 热门评论 -->
+
+      <!-- S - 全部评论 -->
+      <AllComments
+        ref="allComment"
+        v-if="isShowAllComment"
+        :allComments="allComments"
+        @refreshAllComment="handleRereshAllComment"
+        @loadMoreComment="handleLoadMoreComment"
+        @closeAllComment="handleCloseAllComment"
+      />
+      <!-- E - 全部评论 -->
     </template>
   </cube-page>
 </template>
@@ -103,24 +96,58 @@
 import { getDetail, PostInfo } from '../api/detail'
 import { getComment, Comment } from '../api/comment'
 import CubePage from '../components/base/CubePage'
+import HotComments from '../components/detail/HotComments'
+import AllComments from '../components/detail/AllComments'
 
 export default {
   name: 'PostDetail',
   components: {
     CubePage,
+    HotComments,
+    AllComments,
   },
   data() {
     return {
       postDetail: null,
       hotComment: [],
       allComments: [],
+      isShowAllComment: false,
+      lastCommentId: 0,
+      commentLoaded: false,
     }
   },
   created() {
     this.postId = this.$route.params.id
+    // this.postId = 14701095
     this.getDetailData(this.postId)
   },
   methods: {
+    handleCloseAllComment() {
+      this.isShowAllComment = false
+    },
+    handleRereshAllComment() {
+      this.getCommentData()
+    },
+    async handleLoadMoreComment(scroll) {
+      if (this.commentLoaded) {
+        scroll.forceUpdate()
+        return
+      }
+      const result = await getComment(this.postId, this.lastCommentId)
+      if (result.Code === 0 && result.Data.length) {
+        this.allComments = this.allComments.concat(
+          this._formatComment(result.Data)
+        )
+        this.lastCommentId = this.allComments[this.allComments.length - 1].commentId
+      } else {
+        this.commentLoaded = true
+        // 如果没有新数据
+        scroll.forceUpdate()
+      }
+    },
+    handleShowAllComment() {
+      this.isShowAllComment = true
+    },
     async getDetailData(postId) {
       const result = await getDetail(postId)
       if (result.Code === 0) {
@@ -130,14 +157,14 @@ export default {
       }
     },
     async getCommentData() {
-      console.log(typeof this.postId)
-      const result = await getComment(this.postId)
-      console.log('==评论==', result)
+      this.lastCommentId = 0
+      const result = await getComment(this.postId, this.lastCommentId)
       if (result.Code === 0) {
         this.hotComment = this._formatComment(result.Data.slice(0, 3))
         this.allComments = this._formatComment(result.Data)
-        console.log(this.hotComment)
-        console.log(this.allComments)
+        this.lastCommentId = this.allComments[
+          this.allComments.length - 1
+        ].commentId
       }
     },
     _formatComment(data) {
@@ -158,6 +185,11 @@ export default {
 .detail {
   .wrapper {
     height: calc(100% - 88px);
+
+    .content {
+      height: 100%;
+      position: relative;
+    }
   }
   .video-container {
     width: 100%;
@@ -304,7 +336,7 @@ export default {
 
     .all_comment_count {
       margin-top: 16px;
-      color: #2A90D7;
+      color: #2a90d7;
       font-size: 24px;
     }
   }

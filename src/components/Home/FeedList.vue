@@ -135,9 +135,9 @@ export default {
         if (result.Code === 0) {
           this.feedList = this._formatData(result.Data)
           const contentScroll = this.$refs.contentScroll
-          contentScroll.scroll.beforePullDown && contentScroll.refresh()
+          contentScroll.beforePullDown && contentScroll.refresh()
           if (result.Data.length === 0) {
-            this.$refs.scroll.forceUpdate()
+            this.$refs.contentScroll.forceUpdate()
           }
         }
       }
@@ -161,23 +161,10 @@ export default {
 .home {
   > .wrapper {
     height: calc(100% - 88px);
-  }
-  .content {
-    margin: 0 !important;
-    height: 100%;
-    display: flex;
-    flex-flow: column;
-    > header {
-      line-height: 0;
-      img {
-        width: 100%;
-      }
-    }
-    footer {
-      line-height: 0;
-      img {
-        width: 100%;
-      }
+
+    .content {
+      height: 100%;
+      position: relative;
     }
   }
   .nav-scroll-list-wrap {

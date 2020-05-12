@@ -5,13 +5,13 @@
  */
 export const setCache = (key: string, value: any) => {
   if (!key) {
-    return;
+    return
   }
   if (typeof value !== 'string') {
-    value = JSON.stringify(value);
+    value = JSON.stringify(value)
   }
-  window.localStorage.setItem(key, value);
-};
+  window.localStorage.setItem(key, value)
+}
 
 /**
  * 获取存储
@@ -19,10 +19,10 @@ export const setCache = (key: string, value: any) => {
  */
 export const getCache = (key: string) => {
   if (!key) {
-    return;
+    return
   }
-  return window.localStorage.getItem(key);
-};
+  return window.localStorage.getItem(key)
+}
 /**
  * 浏览器判断
  * 用法示例——多套页面判断是否显示移动端：
@@ -32,9 +32,10 @@ export const getCache = (key: string) => {
  *   }
  */
 export const parseUA = () => {
-  const u = navigator.userAgent;
-  const ua = navigator.userAgent.toLowerCase();
-  return { // 移动终端浏览器版本信息
+  const u = navigator.userAgent
+  const ua = navigator.userAgent.toLowerCase()
+  return {
+    // 移动终端浏览器版本信息
     trident: u.indexOf('Trident') > -1, // IE内核
     presto: u.indexOf('Presto') > -1, // opera内核
     webKit: u.indexOf('AppleWebKit') > -1, // 苹果、谷歌内核
@@ -48,21 +49,21 @@ export const parseUA = () => {
     iosv: u.substr(u.indexOf('iPhone OS') + 9, 3),
     weixin: ua.indexOf('MicroMessenger') > 0,
     ali: u.indexOf('AliApp') > -1,
-  };
-};
+  }
+}
 
 export const getOS = () => {
-  let os = '';
-  const ua = navigator.userAgent.toLowerCase();
-  const oslist = ['ios', 'android'];
+  let os = ''
+  const ua = navigator.userAgent.toLowerCase()
+  const oslist = ['iphone', 'android']
   for (const item of oslist) {
     if (ua.indexOf(item) >= 0) {
-      os = item;
-      break;
+      os = item
+      break
     }
   }
-  return os;
-};
+  return os === 'iphone' ? 'ios' : 'android'
+}
 
 /**
  * 删除左右两端的空格
@@ -70,7 +71,7 @@ export const getOS = () => {
  * @returns {string | * | void}
  */
 function trim(str: string) {
-  return str.replace(/(^\s*)|(\s*$)/g, '');
+  return str.replace(/(^\s*)|(\s*$)/g, '')
 }
 
 /**
@@ -79,7 +80,7 @@ function trim(str: string) {
  * @returns {string|*|void}
  */
 function ltrim(str: string) {
-  return str.replace(/(^\s*)/g, '');
+  return str.replace(/(^\s*)/g, '')
 }
 
 /**
@@ -88,7 +89,7 @@ function ltrim(str: string) {
  * @returns {string | * | void}
  */
 function rtrim(str: string) {
-  return str.replace(/(\s*$)/g, '');
+  return str.replace(/(\s*$)/g, '')
 }
 
 /**
@@ -103,34 +104,33 @@ function rtrim(str: string) {
 //   }
 // }
 
-
 /**
  * 判断当前网络环境
  */
 export const isWifi = () => {
   try {
-    let wifi = true;
-    const ua = window.navigator.userAgent;
+    let wifi = true
+    const ua = window.navigator.userAgent
     // 如果是微信
     if (/MicroMessenger/.test(ua)) {
       if (ua.indexOf('WIFI') >= 0) {
-        return true;
+        return true
       } else {
-        wifi = false;
+        wifi = false
       }
       // 如果支持navigator.connection
     } else if (window.navigator.connection) {
-      const con = window.navigator.connection;
-      const network = con.type;
+      const con = window.navigator.connection
+      const network = con.type
       if (network !== 'wifi' && network !== '2' && network !== 'unknown') {
-        wifi = false;
+        wifi = false
       }
     }
-    return wifi;
+    return wifi
   } catch (e) {
-    return false;
+    return false
   }
-};
+}
 
 /**
  * 首字母大写
@@ -138,19 +138,19 @@ export const isWifi = () => {
  * @returns {string}
  */
 export const fistLetterUpper = (str: string) => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
 
 /**
  * 过滤非法字符串
  * @param str
  */
 export const illegalFilter = (str: string) => {
-  const regEn = /[`~!@#$%^&*()_+<>?:'{},.\/;'[\]]/im;
-  const regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im;
+  const regEn = /[`~!@#$%^&*()_+<>?:'{},.\/;'[\]]/im
+  const regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
 
   if (regEn.test(str) || regCn.test(str)) {
-    return false;
+    return false
   }
-  return true;
-};
+  return true
+}

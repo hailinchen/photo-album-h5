@@ -111,10 +111,11 @@ export default {
       line-height: 20px;
       font-size: 14px;
     }
-    .content {
-      height: 100%;
-      position: relative;
-    }
+  }
+
+  .content {
+    height: 100%;
+    position: relative;
   }
 }
 </style>
