@@ -7,12 +7,14 @@ import {
   Style,
   TabBar,
   Scroll,
-  Loading
+  Loading,
+  Textarea,
 } from 'cube-ui';
 
 Vue.use(TabBar)
 Vue.use(Scroll)
 Vue.use(Loading)
+Vue.use(Textarea)
 
 Vue.config.productionTip = false;
 

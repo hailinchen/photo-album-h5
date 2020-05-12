@@ -260,6 +260,9 @@ progress {
 
 textarea {
   overflow: auto;
+  border: none;
+  resize: none;
+  outline: none;
 }
 
 /**

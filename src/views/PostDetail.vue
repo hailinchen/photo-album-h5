@@ -81,13 +81,18 @@
       <!-- S - 全部评论 -->
       <AllComments
         ref="allComment"
-        v-if="isShowAllComment"
+        v-show="isShowAllComment"
         :allComments="allComments"
         @refreshAllComment="handleRereshAllComment"
         @loadMoreComment="handleLoadMoreComment"
         @closeAllComment="handleCloseAllComment"
+        @addCommit="handleAddCommit"
       />
       <!-- E - 全部评论 -->
+
+      <!-- S - 输入评论 -->
+      <InputComment v-show="isShowInput"/>
+      <!-- E - 输入评论 -->
     </template>
   </cube-page>
 </template>
@@ -98,6 +103,7 @@ import { getComment, Comment } from '../api/comment'
 import CubePage from '../components/base/CubePage'
 import HotComments from '../components/detail/HotComments'
 import AllComments from '../components/detail/AllComments'
+import InputComment from '../components/detail/InputComment'
 
 export default {
   name: 'PostDetail',
@@ -105,6 +111,7 @@ export default {
     CubePage,
     HotComments,
     AllComments,
+    InputComment,
   },
   data() {
     return {
@@ -114,6 +121,7 @@ export default {
       isShowAllComment: false,
       lastCommentId: 0,
       commentLoaded: false,
+      isShowInput: true,
     }
   },
   created() {
@@ -122,6 +130,9 @@ export default {
     this.getDetailData(this.postId)
   },
   methods: {
+    handleAddCommit() {
+      this.isShowInput = true
+    },
     handleCloseAllComment() {
       this.isShowAllComment = false
     },

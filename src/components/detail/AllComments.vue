@@ -1,6 +1,6 @@
 <template>
   <div class="all_comment_wrapper" @click="handleClose">
-    <div class="comment_list">
+    <div class="comment_list" :class="{ slideDown: clickClose }">
       <h2 class="title">评论</h2>
       <div class="comment_list_wrapper">
         <cube-scroll
@@ -42,6 +42,10 @@
           </template>
         </cube-scroll>
       </div>
+      <div class="add_comment" @click.stop="handleAddCommit">
+        <i class="iconfont icon-edit"></i>
+        <span>写评论...</span>
+      </div>
     </div>
   </div>
 </template>
@@ -68,18 +72,25 @@ export default {
           threshold: 0,
           txt: {
             more: '上滑加载更多',
-            noMore: '没有更多了'
+            noMore: '已显示全部评论',
           },
-          visible: true
+          visible: true,
         },
       },
       secondStop: 26,
       scroll: null,
+      clickClose: false,
     }
   },
   methods: {
+    handleAddCommit() {
+      this.$emit('addCommit')
+    },
     handleClose() {
-      this.$emit('closeAllComment')
+      this.clickClose = true
+      this.$nextTick(() => {
+        this.$emit('closeAllComment')
+      })
     },
     onPullingDown() {
       this.$emit('refreshAllComment')
@@ -90,7 +101,7 @@ export default {
   },
   mounted() {
     this.scroll = this.$refs.commentScroll
-  }
+  },
 }
 </script>
 
@@ -111,10 +122,15 @@ export default {
     position: absolute;
     bottom: 0;
     height: calc(100% - 254px);
+    animation: slideUp 0.5s ease-in;
+
+    &.slidedown {
+      animation: slideDown 0.5s ease-out;
+    }
 
     .comment_list_wrapper {
       width: 100%;
-      height: 100%;
+      height: calc(100% - 88px - 98px);
       transform: rotate(0deg); // fix 子元素超出边框圆角部分不隐藏的问题
       position: absolute;
       top: 88px;
@@ -170,6 +186,26 @@ export default {
       }
     }
   }
+
+  .add_comment {
+    width: 100%;
+    height: 98px;
+    line-height: 98px;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px -1px 16px 0px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    bottom: 0;
+
+    .iconfont {
+      font-size: 44px;
+      margin-left: 24px;
+    }
+
+    span {
+      font-size: 32px;
+      color: #666666;
+    }
+  }
 }
 
 .cube-pulldown-wrapper {
@@ -215,5 +251,25 @@ export default {
 .success-enter-to,
 .success-leave {
   width: 100%;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
 }
 </style>
