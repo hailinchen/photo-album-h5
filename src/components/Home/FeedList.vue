@@ -54,19 +54,10 @@
                   <img class="avatar" :src="item.user.user_icon" alt="" />
                   <span class="name">{{ item.user.name }}</span>
                   <div class="like_count">
-                    <img
-                      class="icon"
-                      src="../../assets/img/icon_like@2x.png"
-                      alt=""
-                    /><span class="count">{{ item.post.like_count }}</span>
+                    <i class="iconfont icon-like"></i><span class="count">{{ item.post.like_count }}</span>
                   </div>
                   <div class="comment_count">
-                    <img
-                      class="icon"
-                      src="../../assets//img/icon_comment@2x.png"
-                      alt=""
-                    />
-                    <span class="count">{{ item.post.comment_count }}</span>
+                    <i class="iconfont icon-comment"></i><span class="count">{{ item.post.comment_count }}</span>
                   </div>
                   <button class="share">
                     <img src="../../assets/img/icon_home_share@2x.png" alt="" />
@@ -401,11 +392,6 @@ export default {
         font-weight: 500;
         margin-right: 54px;
       }
-      .like_count {
-        
-      }
-      .comment_count {
-      }
 
       .like_count,
       .comment_count {
@@ -416,9 +402,8 @@ export default {
         color: #666666;
         margin-right: 26px;
 
-        .icon {
-          width: 44px;
-          height: 44px;
+        .iconfont {
+          font-size: 40px;
           margin-right: 10px;
         }
       }
