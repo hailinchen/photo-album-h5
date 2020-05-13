@@ -3,44 +3,50 @@
     <div class="comment_list" :class="{ slideDown: clickClose }">
       <h2 class="title">评论</h2>
       <div class="comment_list_wrapper">
-        <cube-scroll
-          class="scroll_comment"
-          ref="commentScroll"
-          :data="allComments"
-          :options="options"
-          @pulling-down="onPullingDown"
-          @pulling-up="onPullingUp"
-        >
-          <ul>
-            <li v-for="item in allComments" :key="item.commentId">
-              <img class="item_l" :src="item.avatar" alt="" />
-              <div class="item_r">
-                <div class="item_name">{{ item.name }}</div>
-                <p>{{ item.commentContent }}</p>
-              </div>
-            </li>
-          </ul>
-          <template slot="pulldown" slot-scope="props">
-            <div
-              v-if="props.pullDownRefresh"
-              class="cube-pulldown-wrapper"
-              :style="props.pullDownStyle"
-            >
-              <div
-                v-if="props.beforePullDown"
-                class="before-trigger"
-                :style="{ paddingTop: props.bubbleY + 'px' }"
+        <div class="content_scroll_list_wrap">
+          <cube-scroll
+            class="scroll_comment"
+            ref="commentScroll"
+            :data="allComments"
+            :options="options"
+            @pulling-down="onPullingDown"
+            @pulling-up="onPullingUp"
+          >
+            <ul>
+              <li
+                v-for="item in allComments"
+                :key="item.commentId"
+                @click="answerCommit(item.commentId)"
               >
-                <span :class="{ rotate: props.bubbleY > 0 }">↓</span>
-              </div>
-              <div class="after-trigger" v-else>
-                <div v-show="props.isPullingDown" class="loading">
-                  <cube-loading></cube-loading>
+                <img class="item_l" :src="item.avatar" alt="" />
+                <div class="item_r">
+                  <div class="item_name">{{ item.name }}</div>
+                  <p>{{ item.commentContent }}</p>
+                </div>
+              </li>
+            </ul>
+            <template slot="pulldown" slot-scope="props">
+              <div
+                v-if="props.pullDownRefresh"
+                class="cube-pulldown-wrapper"
+                :style="props.pullDownStyle"
+              >
+                <div
+                  v-if="props.beforePullDown"
+                  class="before-trigger"
+                  :style="{ paddingTop: props.bubbleY + 'px' }"
+                >
+                  <span :class="{ rotate: props.bubbleY > 0 }">↓</span>
+                </div>
+                <div class="after-trigger" v-else>
+                  <div v-show="props.isPullingDown" class="loading">
+                    <cube-loading></cube-loading>
+                  </div>
                 </div>
               </div>
-            </div>
-          </template>
-        </cube-scroll>
+            </template>
+          </cube-scroll>
+        </div>
       </div>
       <div class="add_comment" @click.stop="handleAddCommit">
         <i class="iconfont icon-edit"></i>
@@ -83,6 +89,9 @@ export default {
     }
   },
   methods: {
+    answerCommit(parentId) {
+      this.$emit('atComment', parentId)
+    },
     handleAddCommit() {
       this.$emit('addCommit')
     },
@@ -136,6 +145,16 @@ export default {
       top: 88px;
       bottom: 0;
       overflow: hidden;
+
+      .content_scroll_list_wrap {
+        width: 100%;
+        height: 100%;
+        transform: rotate(0deg); // fix 子元素超出边框圆角部分不隐藏的问题
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        overflow: hidden;
+      }
     }
 
     .title {

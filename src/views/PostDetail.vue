@@ -50,17 +50,20 @@
           <div class="post_count_item post_count_play">
             {{ postDetail.playCount }}次播放
           </div>
-          <div class="post_count_item post_count_like">
+          <!-- 点赞 -->
+          <div class="post_count_item post_count_like" @click="handleLike">
             <i
               class="iconfont icon-like"
-              style="{color: postDetail.isClikedLike === 0 ? '' : ''}"
+              :style="{color: postDetail.isClickedLike ? '#F85959' : '#666666'}"
             ></i>
             <span>{{ postDetail.likeCount }}</span>
           </div>
+          <!-- 评论 -->
           <div class="post_count_item post_count_comment">
             <i class="iconfont icon-comment"></i>
             <span>{{ postDetail.commentCount }}</span>
           </div>
+          <!-- 转发 -->
           <div class="post_count_item post_count_share">
             <i class="iconfont icon-share"></i>
             <span>{{ postDetail.shareCount }}</span>
@@ -73,7 +76,7 @@
       <!-- S - 热门评论 -->
       <HotComments
         :hotComment="hotComment"
-        :commentCount="postDetail.commentCount"
+        :commentCount="commentCount"
         @showAllComment="handleShowAllComment"
       />
       <!-- E - 热门评论 -->
@@ -87,11 +90,16 @@
         @loadMoreComment="handleLoadMoreComment"
         @closeAllComment="handleCloseAllComment"
         @addCommit="handleAddCommit"
+        @atComment="handleAnswerCommit"
       />
       <!-- E - 全部评论 -->
 
       <!-- S - 输入评论 -->
-      <InputComment v-show="isShowInput"/>
+      <InputComment
+        v-show="isShowInput"
+        @publishComment="handlePublishComment"
+        @cancelComment="handleCancelComment"
+      />
       <!-- E - 输入评论 -->
     </template>
   </cube-page>
@@ -99,7 +107,8 @@
 
 <script>
 import { getDetail, PostInfo } from '../api/detail'
-import { getComment, Comment } from '../api/comment'
+import { getComment, Comment, createComment } from '../api/comment'
+import { postLike, postCancelLike } from '../api/like'
 import CubePage from '../components/base/CubePage'
 import HotComments from '../components/detail/HotComments'
 import AllComments from '../components/detail/AllComments'
@@ -121,15 +130,64 @@ export default {
       isShowAllComment: false,
       lastCommentId: 0,
       commentLoaded: false,
-      isShowInput: true,
+      isShowInput: false,
+      isAnswer: false,
+      parentCommentId: '',
+      commentCount: 0,
     }
   },
   created() {
-    this.postId = this.$route.params.id
+    this.postId = Number(this.$route.params.id)
     // this.postId = 14701095
     this.getDetailData(this.postId)
   },
   methods: {
+    async handleLike() {
+      if (this.postDetail.isClickedLike) {
+        await postCancelLike(this.postId)
+      } else {
+        await postLike(this.postId)
+        const toast = this.$createToast({
+          txt: '点赞成功',
+          type: 'txt',
+        })
+        toast.show()
+      }
+      this.postDetail.isClickedLike = !this.postDetail.isClickedLike
+    },
+    handleAnswerCommit(parentCommentId) {
+      this.isAnswer = true
+      this.parentCommentId = parentCommentId
+    },
+    async handlePublishComment(value) {
+      const res = await createComment(
+        this.postId,
+        value,
+        `${this.parentCommentId}`
+      )
+      this.isShowInput = false
+      if (res.Code === 0) {
+        const toast = this.$createToast({
+          txt: '评论成功',
+          type: 'txt',
+          onTimeout: () => {
+            this.commentCount = this.commentCount + 1
+            this.getCommentData()
+          },
+        })
+        toast.show()
+      } else {
+        toast = this.$createToast({
+          txt: res.Msg,
+          type: 'txt',
+        })
+        toast.show()
+      }
+      console.log(res)
+    },
+    handleCancelComment() {
+      this.isShowInput = false
+    },
     handleAddCommit() {
       this.isShowInput = true
     },
@@ -149,7 +207,9 @@ export default {
         this.allComments = this.allComments.concat(
           this._formatComment(result.Data)
         )
-        this.lastCommentId = this.allComments[this.allComments.length - 1].commentId
+        this.lastCommentId = this.allComments[
+          this.allComments.length - 1
+        ].commentId
       } else {
         this.commentLoaded = true
         // 如果没有新数据
@@ -164,6 +224,7 @@ export default {
       if (result.Code === 0) {
         this.postDetail = new PostInfo(result.Data)
         console.log(this.postDetail)
+        this.commentCount = this.postDetail.commentCount
         this.getCommentData()
       }
     },
@@ -194,7 +255,7 @@ export default {
 
 <style lang="scss" scope>
 .detail {
-  .wrapper {
+  > .wrapper {
     height: calc(100% - 88px);
 
     .content {

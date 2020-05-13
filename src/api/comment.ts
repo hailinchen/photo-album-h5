@@ -1,6 +1,19 @@
 import Request from '../common/request'
 import { baseURL } from './config'
 
+export function createComment(
+  postId: number,
+  commentContent: string,
+  parentCommentId: string
+) {
+  const data = {
+    post_id: postId,
+    comment_content: commentContent,
+    parent_comment_id: parentCommentId
+  }
+  return Request.postForm(`${baseURL}/v21/comment/text/create`, data)
+}
+
 export function getComment(postId: string, lastCommentId: number) {
   return Request.get(`${baseURL}/post/comment/list/${postId}/${lastCommentId}`)
 }

@@ -2,7 +2,7 @@
   <cube-page type="scroll-view" class="home" title="美脸">
     <template slot="content">
       <!-- S - 顶部导航 -->
-      <div class="nav-scroll-list-wrap">
+      <div class="nav_scroll_list_wrap">
         <cube-scroll ref="navScroll" direction="horizontal">
           <ul class="nav-wrapper">
             <li v-for="(item, index) in navTxts" :key="index" class="nav-item">
@@ -17,8 +17,8 @@
       <!-- E - 顶部导航 -->
 
       <!-- S - 列表 -->
-      <div class="content-scroll-wrapper">
-        <div class="content-scroll-list-wrap" ref="scrollWrapper">
+      <div class="content_scroll_wrapper">
+        <div class="content_scroll_list_wrap" ref="scrollWrapper">
           <cube-scroll
             ref="contentScroll"
             :data="feedList"
@@ -48,16 +48,22 @@
                   <span class="play_duration">{{
                     item.post.play_duration
                   }}</span>
-                  <img src="../../assets/img/icon_play@2x.png" alt="" class="icon_play">
+                  <img
+                    src="../../assets/img/icon_play@2x.png"
+                    alt=""
+                    class="icon_play"
+                  />
                 </div>
                 <div class="item_bottom">
                   <img class="avatar" :src="item.user.user_icon" alt="" />
                   <span class="name">{{ item.user.name }}</span>
                   <div class="like_count">
-                    <i class="iconfont icon-like"></i><span class="count">{{ item.post.like_count }}</span>
+                    <i class="iconfont icon-like"></i
+                    ><span class="count">{{ item.post.like_count }}</span>
                   </div>
                   <div class="comment_count">
-                    <i class="iconfont icon-comment"></i><span class="count">{{ item.post.comment_count }}</span>
+                    <i class="iconfont icon-comment"></i
+                    ><span class="count">{{ item.post.comment_count }}</span>
                   </div>
                   <button class="share">
                     <img src="../../assets/img/icon_home_share@2x.png" alt="" />
@@ -167,7 +173,7 @@ export default {
       position: relative;
     }
   }
-  .nav-scroll-list-wrap {
+  .nav_scroll_list_wrap {
     transform: rotate(0deg); // fix 子元素超出边框圆角部分不隐藏的问题
     position: fixed;
     width: 100%;
@@ -214,12 +220,12 @@ export default {
       }
     }
   }
-  .content-scroll-wrapper {
+  .content_scroll_wrapper {
     position: absolute;
     width: 100%;
     height: calc(100% - 88px);
     top: 88px;
-    .content-scroll-list-wrap {
+    .content_scroll_list_wrap {
       width: 100%;
       height: 100%;
       transform: rotate(0deg); // fix 子元素超出边框圆角部分不隐藏的问题
@@ -227,13 +233,6 @@ export default {
       top: 0;
       bottom: 0;
       overflow: hidden;
-      .imgs-wrapper {
-        .imgs-item {
-          > img {
-            width: 100%;
-          }
-        }
-      }
     }
   }
   .cube-pulldown-wrapper {

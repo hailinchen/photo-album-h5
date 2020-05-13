@@ -9,12 +9,14 @@ import {
   Scroll,
   Loading,
   Textarea,
+  Toast
 } from 'cube-ui';
 
 Vue.use(TabBar)
 Vue.use(Scroll)
 Vue.use(Loading)
 Vue.use(Textarea)
+Vue.use(Toast)
 
 Vue.config.productionTip = false;
 

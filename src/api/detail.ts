@@ -35,7 +35,7 @@ export class PostInfo {
   public content: string
   public converUrl: string
   public playUrl: string
-  public isClickedLike: number
+  public isClickedLike: boolean
   public isRelease: number
   public likeCount: number
   public playCount: number
@@ -53,9 +53,8 @@ export class PostInfo {
     this.content = postDetail.post.content
     this.converUrl = postDetail.post.conver_url
     this.playUrl = postDetail.post.play_url
-    this.isClickedLike = postDetail.post.is_clicked_like
+    this.isClickedLike = postDetail.post.is_clicked_like === 0 ? false : true
     this.isRelease = postDetail.post.is_release
-    this.isClickedLike = postDetail.post.is_clicked_like
     this.likeCount = postDetail.post.like_count
     this.playCount = postDetail.post.play_count
     this.shareCount = postDetail.post.share_count
