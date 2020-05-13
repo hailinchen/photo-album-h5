@@ -23,7 +23,7 @@ function getSign(url: string, timestr: number) {
 
 function getHeader(url: string, headers = {}) {
   const header = {
-    uid: getCache('uid') || 3691953,
+    'uid': getCache('uid') || 3691953,
     'x-os': getOS(),
     'x-platform-type': 'meilian',
     'x-access-time': timestamp(),

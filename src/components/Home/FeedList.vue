@@ -97,13 +97,20 @@
 
 <script type="text/ecmascript-6">
 import CubePage from '../base/CubePage';
-import { getFeedList } from '../../api/feedList.ts'
-
-const txts = ['推荐', '搞笑', '情感', '广场舞']
 
 export default {
   components: {
     CubePage
+  },
+  props: {
+    feedList: {
+      type: Array,
+      default: []
+    },
+    navTxts: {
+      type: Array,
+      default: []
+    }
   },
   data() {
     return {
@@ -116,8 +123,6 @@ export default {
         },
         pullUpLoad: true
       },
-      navTxts: txts,
-      feedList: [],
     }
   },
   methods: {
@@ -125,40 +130,15 @@ export default {
       this.$router.push('/postDetail/' + postId)
     },
     onPullingDown() {
-      this._getList()
+      this.$emit('onPullingDown')
     },
-    async onPullingUp() {
-      const result = await getFeedList()
-      if (result) {
-        if (result.Code === 0) {
-          this.feedList = this.feedList.concat(this._formatData(result.Data))
-        }
-      }
-    },
-    async _getList() {
-      const result = await getFeedList()
-      if (result) {
-        if (result.Code === 0) {
-          this.feedList = this._formatData(result.Data)
-          const contentScroll = this.$refs.contentScroll
-          contentScroll.beforePullDown && contentScroll.refresh()
-          if (result.Data.length === 0) {
-            this.$refs.contentScroll.forceUpdate()
-          }
-        }
-      }
-    },
-    _formatData(data) {
-      const newList = data
-        .filter((item) => item.value !== null)
-        .map((item) =>
-          Object.assign({}, { card_type: item.card_type }, { ...item.value })
-        )
-      return newList
+    onPullingUp() {
+      this.$emit('onPullingUp')
     }
   },
-  created() {
-    this._getList()
+  mounted() {
+    const contentScroll = this.$refs.contentScroll
+    contentScroll.beforePullDown && contentScroll.refresh()
   }
 }
 </script>
