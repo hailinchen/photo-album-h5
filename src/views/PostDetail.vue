@@ -54,12 +54,17 @@
           <div class="post_count_item post_count_like" @click="handleLike">
             <i
               class="iconfont icon-like"
-              :style="{color: postDetail.isClickedLike ? '#F85959' : '#666666'}"
+              :style="{
+                color: postDetail.isClickedLike ? '#F85959' : '#666666',
+              }"
             ></i>
             <span>{{ postDetail.likeCount }}</span>
           </div>
           <!-- 评论 -->
-          <div class="post_count_item post_count_comment">
+          <div
+            class="post_count_item post_count_comment"
+            @click="handleAddCommit"
+          >
             <i class="iconfont icon-comment"></i>
             <span>{{ postDetail.commentCount }}</span>
           </div>
@@ -68,13 +73,15 @@
             <i class="iconfont icon-share"></i>
             <span>{{ postDetail.shareCount }}</span>
           </div>
-          <button class="more"><i class="iconfont icon-more"></i></button>
+          <button class="more" @click="handleShowMorePop">
+            <i class="iconfont icon-more"></i>
+          </button>
         </div>
       </div>
       <!-- E - 帖子信息 -->
 
       <!-- S - 热门评论 -->
-      <HotComments
+      <hot-comments
         :hotComment="hotComment"
         :commentCount="commentCount"
         @showAllComment="handleShowAllComment"
@@ -82,7 +89,7 @@
       <!-- E - 热门评论 -->
 
       <!-- S - 全部评论 -->
-      <AllComments
+      <all-comments
         ref="allComment"
         v-show="isShowAllComment"
         :allComments="allComments"
@@ -95,12 +102,15 @@
       <!-- E - 全部评论 -->
 
       <!-- S - 输入评论 -->
-      <InputComment
+      <input-comment
         v-show="isShowInput"
         @publishComment="handlePublishComment"
         @cancelComment="handleCancelComment"
       />
       <!-- E - 输入评论 -->
+      <!-- S - 更多操作 -->
+      <detail-more-action :isShow="isShowMoreAction"></detail-more-action>
+      <!-- E - 更多操作 -->
     </template>
   </cube-page>
 </template>
@@ -113,6 +123,7 @@ import CubePage from '../components/base/CubePage'
 import HotComments from '../components/detail/HotComments'
 import AllComments from '../components/detail/AllComments'
 import InputComment from '../components/detail/InputComment'
+import DetailMoreAction from '../components/common/DetailMoreAction'
 
 export default {
   name: 'PostDetail',
@@ -121,6 +132,7 @@ export default {
     HotComments,
     AllComments,
     InputComment,
+    DetailMoreAction,
   },
   data() {
     return {
@@ -134,6 +146,7 @@ export default {
       isAnswer: false,
       parentCommentId: '',
       commentCount: 0,
+      isShowMoreAction: false,
     }
   },
   created() {
@@ -142,6 +155,9 @@ export default {
     this.getDetailData(this.postId)
   },
   methods: {
+    handleShowMorePop() {
+      this.isShowMoreAction = true
+    },
     async handleLike() {
       if (this.postDetail.isClickedLike) {
         await postCancelLike(this.postId)
