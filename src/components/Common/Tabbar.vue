@@ -1,19 +1,17 @@
 <template>
   <div class="tab_bar">
     <cube-tab-bar
-      v-model="selectedLabelDefault"
-      :data="tabs"
+      v-model="selectedLabel"
+      @click="clickHandler"
     >
-    </cube-tab-bar>
-    <!-- <cube-tab-bar v-model="selectedLabel">
       <cube-tab
         v-for="item in tabs"
+        :key="item.path"
         :icon="item.icon"
+        :value="item.path"
         :label="item.label"
-        :key="item.label"
-      >
-      </cube-tab>
-    </cube-tab-bar> -->
+      ></cube-tab>
+    </cube-tab-bar>
   </div>
 </template>
 
@@ -21,26 +19,58 @@
 export default {
   data() {
     return {
-      selectedLabelDefault: '首页',
+      selectedLabel: '/index',
       tabs: [
         {
           label: '首页',
-          value: '首页',
-          icon: 'iconfont icon-home'
+          icon: 'iconfont icon-home',
+          path: '/index',
         },
         {
           label: '特效相册',
-          value: '特效相册',
-          icon: 'iconfont icon-add'
+          icon: 'iconfont icon-add',
+          path: '/album',
         },
         {
           label: '我的',
-          icon: 'iconfont icon-me'
-        }
-      ]
+          icon: 'iconfont icon-me',
+          path: '/my',
+        },
+      ],
     }
   },
-  methods: {}
+  mounted() {
+    console.log(this.$route)
+    const path = this.$route.path
+    console.log(path)
+    this.selectedLabel = path
+  },
+  methods: {
+    clickHandler(path) {
+      // console.log(label)
+      console.log(path === this.$route.path)
+      if (path === this.selectedLabel) {
+        return
+      }
+      this.selectedLabel = path
+      this.$router.push(path)
+    },
+    changeHandle(value) {
+      // console.log(value)
+      // if (value === this.selectedLabelDefault) {
+      //   return
+      // }
+      // this.selectedLabelDefault = value
+      // console.log('===tabbar===', value)
+      // if (value === 'album') {
+      //   this.$router.push('/album')
+      // } else if (value === 'my') {
+      //   this.$router.push('/my')
+      // } else if (value === 'index') {
+      //   this.$router.push('/')
+      // }
+    },
+  },
 }
 </script>
 
@@ -58,7 +88,7 @@ export default {
     color: #b5b5b5;
 
     &.cube-tab_active {
-      color: #F85959;
+      color: #f85959;
     }
 
     .iconfont {

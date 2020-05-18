@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- <Header /> -->
-    <div class="main">
+    <div class="main" ref="table">
       <FeedList
         v-if="feedList.length"
         :feedList="feedList"
@@ -10,14 +10,12 @@
         @onPullingDown="onPullingDown"
       />
     </div>
-    <Tabbar />
   </div>
 </template>
 
 <script>
 import FeedList from '../components/home/FeedList'
 import Header from '../components/common/Header'
-import Tabbar from '../components/common/Tabbar'
 import { getFeedList } from '../api/feedList.ts'
 
 const txts = ['推荐', '搞笑', '情感', '广场舞']
@@ -73,10 +71,10 @@ export default {
   },
   activated() {
     const beforeRouterName = this.beforeRouter.name
-    // console.log('===', beforeRouterName)
+    console.log('===beforeRouterName===', beforeRouterName)
     if (beforeRouterName && beforeRouterName !== 'PostDetail') {
       // 手动刷新页面
-      this.$refs.table.reload()
+      // this.$refs.table.reload()
     }
   },
 }
