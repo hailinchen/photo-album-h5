@@ -1,69 +1,48 @@
 <template>
-  <div class="all_comment_wrapper" @click="handleClose">
-    <div class="comment_list" :class="{ slideDown: clickClose }">
-      <h2 class="title">评论</h2>
-      <div class="comment_list_wrapper">
-        <div class="content_scroll_list_wrap">
-          <cube-scroll
-            class="scroll_comment"
-            ref="commentScroll"
-            :data="allComments"
-            :options="options"
-            @pulling-down="onPullingDown"
-            @pulling-up="onPullingUp"
-          >
-            <ul>
-              <li
-                v-for="item in allComments"
-                :key="item.commentId"
-                @click="answerCommit(item.commentId)"
-              >
-                <img class="item_l" :src="item.avatar" alt="" />
-                <div class="item_r">
-                  <div class="item_name">{{ item.name }}</div>
-                  <p>{{ item.commentContent }}</p>
-                </div>
-              </li>
-            </ul>
-            <template slot="pulldown" slot-scope="props">
-              <div
-                v-if="props.pullDownRefresh"
-                class="cube-pulldown-wrapper"
-                :style="props.pullDownStyle"
-              >
-                <div
-                  v-if="props.beforePullDown"
-                  class="before-trigger"
-                  :style="{ paddingTop: props.bubbleY + 'px' }"
-                >
-                  <span :class="{ rotate: props.bubbleY > 0 }">↓</span>
-                </div>
-                <div class="after-trigger" v-else>
-                  <div v-show="props.isPullingDown" class="loading">
-                    <cube-loading></cube-loading>
-                  </div>
-                </div>
-              </div>
-            </template>
-          </cube-scroll>
+  <cube-scroll
+    class="scroll_comment"
+    ref="commentScroll"
+    :data="allComments"
+    :options="options"
+    @pulling-down="onPullingDown"
+    @pulling-up="onPullingUp"
+  >
+    <ul>
+      <li v-for="item in allComments" :key="item.commentId" @click.stop="answerCommit(item.commentId)">
+        <img class="item_l" :src="item.avatar" alt />
+        <div class="item_r">
+          <div class="item_name">{{ item.name }}</div>
+          <p>{{ item.commentContent }}</p>
+        </div>
+      </li>
+    </ul>
+    <template slot="pulldown" slot-scope="props">
+      <div v-if="props.pullDownRefresh" class="cube-pulldown-wrapper" :style="props.pullDownStyle">
+        <div
+          v-if="props.beforePullDown"
+          class="before-trigger"
+          :style="{ paddingTop: props.bubbleY + 'px' }"
+        >
+          <span :class="{ rotate: props.bubbleY > 0 }">↓</span>
+        </div>
+        <div class="after-trigger" v-else>
+          <div v-show="props.isPullingDown" class="loading">
+            <cube-loading></cube-loading>
+          </div>
         </div>
       </div>
-      <div class="add_comment" @click.stop="handleAddCommit">
-        <i class="iconfont icon-edit"></i>
-        <span>写评论...</span>
-      </div>
-    </div>
-  </div>
+    </template>
+  </cube-scroll>
 </template>
 
 <script>
 export default {
-  name: 'AllComments',
+  name: "AllComments",
   props: {
     allComments: {
       type: Array,
-      default: [],
-    },
+      default: []
+    }
   },
   data() {
     return {
@@ -72,157 +51,76 @@ export default {
           threshold: 60,
           // stop: 44,
           stopTime: 1000,
-          txt: '更新成功',
+          txt: "更新成功"
         },
         pullUpLoad: {
           threshold: 0,
           txt: {
-            more: '上滑加载更多',
-            noMore: '已显示全部评论',
+            more: "上滑加载更多",
+            noMore: "已显示全部评论"
           },
-          visible: true,
-        },
+          visible: true
+        }
       },
       secondStop: 26,
       scroll: null,
-      clickClose: false,
-    }
+    };
   },
   methods: {
     answerCommit(parentId) {
-      this.$emit('atComment', parentId)
-    },
-    handleAddCommit() {
-      this.$emit('addCommit')
-    },
-    handleClose() {
-      this.clickClose = true
-      this.$nextTick(() => {
-        this.$emit('closeAllComment')
-      })
+      this.$emit("atComment", parentId);
     },
     onPullingDown() {
-      this.$emit('refreshAllComment')
+      console.log("下拉刷新");
+      this.$emit("refreshAllComment");
     },
     onPullingUp() {
-      this.$emit('loadMoreComment', this.scroll)
-    },
+      this.$emit("loadMoreComment", this.scroll);
+    }
   },
   mounted() {
-    this.scroll = this.$refs.commentScroll
-  },
-}
+    this.scroll = this.$refs.commentScroll;
+  }
+};
 </script>
 
-<style lang="scss">
-.all_comment_wrapper {
-  position: fixed;
-  width: 100%;
+<style lang="scss" scoped>
+.scroll_comment {
   height: 100%;
-  background: rgba($color: #000, $alpha: 0.5);
-  top: 0;
-  bottom: 0;
-  z-index: 5;
 
-  .comment_list {
-    background-color: #ffffff;
-    width: 100%;
-    border-radius: 16px 16px 0 0;
-    position: absolute;
-    bottom: 0;
-    height: calc(100% - 254px);
-    animation: slideUp 0.5s ease-in;
+  li {
+    display: flex;
+    flex-direction: row;
+    padding: 16px 30px 0;
+    box-sizing: border-box;
 
-    &.slidedown {
-      animation: slideDown 0.5s ease-out;
+    .item_l {
+      display: block;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      margin-right: 12px;
     }
 
-    .comment_list_wrapper {
-      width: 100%;
-      height: calc(100% - 88px - 98px);
-      transform: rotate(0deg); // fix 子元素超出边框圆角部分不隐藏的问题
-      position: absolute;
-      top: 88px;
-      bottom: 0;
-      overflow: hidden;
-
-      .content_scroll_list_wrap {
-        width: 100%;
-        height: 100%;
-        transform: rotate(0deg); // fix 子元素超出边框圆角部分不隐藏的问题
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        overflow: hidden;
-      }
-    }
-
-    .title {
-      height: 88px;
-      line-height: 88px;
-      color: #666666;
-      font-size: 32px;
-      text-align: center;
-    }
-
-    .scroll_comment {
-      height: 100%;
-    }
-
-    li {
+    .item_r {
       display: flex;
-      flex-direction: row;
-      padding: 16px 30px 0;
-      box-sizing: border-box;
+      flex-direction: column;
+      border-bottom: 1px solid #ededed;
+      padding-bottom: 34px;
 
-      .item_l {
-        display: block;
-        width: 64px;
+      .item_name {
+        color: #212121;
+        font-size: 26px;
         height: 64px;
-        border-radius: 50%;
-        margin-right: 12px;
+        line-height: 64px;
+        margin-bottom: 16px;
       }
 
-      .item_r {
-        display: flex;
-        flex-direction: column;
-        border-bottom: 1px solid #ededed;
-        padding-bottom: 34px;
-
-        .item_name {
-          color: #212121;
-          font-size: 26px;
-          height: 64px;
-          line-height: 64px;
-          margin-bottom: 16px;
-        }
-
-        .item_content {
-          color: #212121;
-          font-size: 32px;
-          line-height: 42px;
-        }
+      .item_content {
+        color: #212121;
+        font-size: 32px;
+        line-height: 42px;
       }
-    }
-  }
-
-  .add_comment {
-    width: 100%;
-    height: 98px;
-    line-height: 98px;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0px -1px 16px 0px rgba(0, 0, 0, 0.2);
-    position: absolute;
-    bottom: 0;
-
-    .iconfont {
-      font-size: 44px;
-      margin-left: 24px;
-    }
-
-    span {
-      font-size: 32px;
-      color: #666666;
     }
   }
 }

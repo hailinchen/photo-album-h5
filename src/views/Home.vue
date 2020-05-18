@@ -73,7 +73,7 @@ export default {
   },
   activated() {
     const beforeRouterName = this.beforeRouter.name
-    console.log('===', beforeRouterName)
+    // console.log('===', beforeRouterName)
     if (beforeRouterName && beforeRouterName !== 'PostDetail') {
       // 手动刷新页面
       this.$refs.table.reload()

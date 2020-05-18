@@ -5,14 +5,12 @@
       <div class="nav_scroll_list_wrap">
         <cube-scroll ref="navScroll" direction="horizontal">
           <ul class="nav-wrapper">
-            <li v-for="(item, index) in navTxts" :key="index" class="nav-item">
-              {{ item }}
-            </li>
+            <li v-for="(item, index) in navTxts" :key="index" class="nav-item">{{ item }}</li>
           </ul>
         </cube-scroll>
         <!-- <div class="more-wrapper">
           <span class="more"></span>
-        </div> -->
+        </div>-->
       </div>
       <!-- E - 顶部导航 -->
 
@@ -45,28 +43,26 @@
                   <h2>{{ item.post.title }}</h2>
                   <!-- <img :style="{height: `${(750 * item.post.conver_image_height / item.post.conver_image_width)}px`}" class="cover_img" :src="item.post.conver_url" alt="" /> -->
                   <span class="play_count">{{ item.post.play_count }}次</span>
-                  <span class="play_duration">{{
+                  <span class="play_duration">
+                    {{
                     item.post.play_duration
-                  }}</span>
-                  <img
-                    src="../../assets/img/icon_play@2x.png"
-                    alt=""
-                    class="icon_play"
-                  />
+                    }}
+                  </span>
+                  <img src="../../assets/img/icon_play@2x.png" alt class="icon_play" />
                 </div>
                 <div class="item_bottom">
-                  <img class="avatar" :src="item.user.user_icon" alt="" />
+                  <img class="avatar" :src="item.user.user_icon" alt />
                   <span class="name">{{ item.user.name }}</span>
                   <div class="like_count">
-                    <i class="iconfont icon-like"></i
-                    ><span class="count">{{ item.post.like_count }}</span>
+                    <i class="iconfont icon-like"></i>
+                    <span class="count">{{ item.post.like_count }}</span>
                   </div>
                   <div class="comment_count">
-                    <i class="iconfont icon-comment"></i
-                    ><span class="count">{{ item.post.comment_count }}</span>
+                    <i class="iconfont icon-comment"></i>
+                    <span class="count">{{ item.post.comment_count }}</span>
                   </div>
                   <button class="share">
-                    <img src="../../assets/img/icon_home_share@2x.png" alt="" />
+                    <img src="../../assets/img/icon_home_share@2x.png" alt />
                   </button>
                 </div>
               </li>
@@ -96,7 +92,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import CubePage from '../base/CubePage';
+import CubePage from "../base/CubePage";
 
 export default {
   components: {
@@ -119,28 +115,28 @@ export default {
           threshold: 60,
           // stop: 44,
           stopTime: 1000,
-          txt: '更新成功'
+          txt: "更新成功"
         },
         pullUpLoad: true
-      },
-    }
+      }
+    };
   },
   methods: {
     goDetail(postId) {
-      this.$router.push('/postDetail/' + postId)
+      this.$router.push("/postDetail/" + postId);
     },
     onPullingDown() {
-      this.$emit('onPullingDown')
+      this.$emit("onPullingDown");
     },
     onPullingUp() {
-      this.$emit('onPullingUp')
+      this.$emit("onPullingUp");
     }
   },
   mounted() {
-    const contentScroll = this.$refs.contentScroll
-    contentScroll.beforePullDown && contentScroll.refresh()
+    const contentScroll = this.$refs.contentScroll;
+    contentScroll.beforePullDown && contentScroll.refresh();
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -204,7 +200,9 @@ export default {
     position: absolute;
     width: 100%;
     height: calc(100% - 88px);
+    transform: rotate(0deg);
     top: 88px;
+
     .content_scroll_list_wrap {
       width: 100%;
       height: 100%;
