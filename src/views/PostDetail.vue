@@ -22,9 +22,13 @@
       <!-- S - 帖子信息 -->
       <div class="post_info">
         <h1 class="post_title">{{ postDetail.title }}</h1>
-        <p v-if="postDetail.content" class="post_content">{{ postDetail.content }}</p>
+        <p v-if="postDetail.content" class="post_content">
+          {{ postDetail.content }}
+        </p>
         <div class="post_count">
-          <div class="post_count_item post_count_play">{{ postDetail.playCount }}次播放</div>
+          <div class="post_count_item post_count_play">
+            {{ postDetail.playCount }}次播放
+          </div>
           <!-- 点赞 -->
           <div class="post_count_item post_count_like" @click="handleLike">
             <i
@@ -36,7 +40,10 @@
             <span>{{ postDetail.likeCount }}</span>
           </div>
           <!-- 评论 -->
-          <div class="post_count_item post_count_comment" @click="handleAddCommit">
+          <div
+            class="post_count_item post_count_comment"
+            @click="handleAddCommit"
+          >
             <i class="iconfont icon-comment"></i>
             <span>{{ postDetail.commentCount }}</span>
           </div>
@@ -61,11 +68,15 @@
       <!-- E - 热门评论 -->
 
       <!-- S - 全部评论 -->
-      <div class="all_comment_wrapper" v-if="isShowAllComment" @click="handleCloseAllComments">
+      <div
+        class="all_comment_wrapper"
+        v-if="isShowAllComment"
+        @click="handleCloseAllComments"
+      >
         <div class="comment_list">
           <h2 class="title">评论</h2>
-          <div class="content-scroll-wrapper">
-            <div class="content-scroll-list-wrap" ref="scrollWrapper">
+          <div class="comment_scroll_wrapper">
+            <div class="comment_scroll_list_wrapper" ref="scrollWrapper">
               <all-comments
                 ref="allComment"
                 :allComments="allComments"
@@ -90,6 +101,7 @@
         @cancelComment="handleCancelComment"
       />
       <!-- E - 输入评论 -->
+
       <!-- S - 更多操作 -->
       <cube-popup
         type="extend-popup"
@@ -98,31 +110,41 @@
         position="bottom"
         :maskClosable="true"
       >
-        <detail-more-action @hideMoreAction="hideMoreAction('moreActionPop')"></detail-more-action>
+        <detail-more-action @hideMoreAction="hideMoreAction('moreActionPop')" />
       </cube-popup>
       <!-- E - 更多操作 -->
+
+      <!-- S - 推荐列表 -->
+      <Recommend :recommendList='recommendList' @pullUpRecommend='pullUpRecommend' />
+      <!-- E - 推荐列表 -->
     </template>
   </cube-page>
 </template>
 
 <script>
-import { getDetail, PostInfo } from "../api/detail";
-import { getComment, Comment, createComment } from "../api/comment";
-import { postLike, postCancelLike } from "../api/like";
-import CubePage from "../components/base/CubePage";
-import HotComments from "../components/detail/HotComments";
-import AllComments from "../components/detail/AllComments";
-import InputComment from "../components/detail/InputComment";
-import DetailMoreAction from "../components/common/DetailMoreAction";
+import { getDetail, PostInfo } from '../api/detail'
+import { getComment, Comment, createComment } from '../api/comment'
+import { postLike, postCancelLike } from '../api/like'
+import { getRecommendList } from '../api/recommend'
+
+import CubePage from '../components/base/CubePage'
+import HotComments from '../components/detail/HotComments'
+import AllComments from '../components/detail/AllComments'
+import InputComment from '../components/detail/InputComment'
+import DetailMoreAction from '../components/common/DetailMoreAction'
+import Recommend from '../components/detail/Recommend'
+
+let pageIndex = 1
 
 export default {
-  name: "PostDetail",
+  name: 'PostDetail',
   components: {
     CubePage,
     HotComments,
     AllComments,
     InputComment,
-    DetailMoreAction
+    DetailMoreAction,
+    Recommend,
   },
   data() {
     return {
@@ -134,7 +156,7 @@ export default {
       commentLoaded: false,
       isShowInput: false,
       isAnswer: false,
-      parentCommentId: "",
+      parentCommentId: '',
       commentCount: 0,
       clickAllCommentClose: false,
       options: {
@@ -142,150 +164,172 @@ export default {
           threshold: 60,
           // stop: 44,
           stopTime: 1000,
-          txt: "更新成功"
+          txt: '更新成功',
         },
         pullUpLoad: {
           threshold: 0,
           txt: {
-            more: "上滑加载更多",
-            noMore: "已显示全部评论"
+            more: '上滑加载更多',
+            noMore: '已显示全部评论',
           },
-          visible: true
-        }
-      }
-    };
+          visible: true,
+        },
+      },
+      recommendList: [], // 推荐列表
+    }
   },
   created() {
-    this.postId = Number(this.$route.params.id);
+    this.postId = Number(this.$route.params.id)
     // this.postId = 14701095
-    this.getDetailData(this.postId);
+    this.getDetailData(this.postId)
   },
   methods: {
+    pullUpRecommend() {
+      pageIndex++
+      this.getRecommend()
+    },
+    async getRecommend() {
+      const { square_id, style_id } = this.postDetail
+      const result = await getRecommendList(pageIndex, square_id, style_id)
+      // console.log(result)
+      if (result.Code === 0) {
+        const list = result.Data.map((item) => {
+          return new PostInfo(item)
+        })
+        if (pageIndex === 1) {
+          this.recommendList = list
+        } else {
+          this.recommendList = this.recommendList.concat(list)
+        }
+      }
+    },
     onPullingDown() {
-      console.log("下拉刷新");
-      this.$emit("refreshAllComment");
+      console.log('下拉刷新')
+      this.$emit('refreshAllComment')
     },
     onPullingUp() {
-      this.$emit("loadMoreComment");
+      this.$emit('loadMoreComment')
     },
     handleCloseAllComments() {
-      this.clickAllCommentClose = true;
-      this.isShowAllComment = false;
+      this.clickAllCommentClose = true
+      this.isShowAllComment = false
     },
     showMoreAction(refId) {
-      const component = this.$refs[refId];
-      component.show();
+      const component = this.$refs[refId]
+      component.show()
     },
     hideMoreAction(refId) {
-      const component = this.$refs[refId];
-      component.hide();
+      const component = this.$refs[refId]
+      component.hide()
     },
     async handleLike() {
       if (this.postDetail.isClickedLike) {
-        await postCancelLike(this.postId);
+        await postCancelLike(this.postId)
       } else {
-        await postLike(this.postId);
+        await postLike(this.postId)
         const toast = this.$createToast({
-          txt: "点赞成功",
-          type: "txt"
-        });
-        toast.show();
+          txt: '点赞成功',
+          type: 'txt',
+        })
+        toast.show()
       }
-      this.postDetail.isClickedLike = !this.postDetail.isClickedLike;
+      this.postDetail.isClickedLike = !this.postDetail.isClickedLike
     },
     handleAnswerCommit(parentCommentId) {
-      this.isAnswer = true;
-      this.parentCommentId = parentCommentId;
+      this.isAnswer = true
+      this.parentCommentId = parentCommentId
     },
     async handlePublishComment(value) {
       const res = await createComment(
         this.postId,
         value,
         `${this.parentCommentId}`
-      );
-      this.isShowInput = false;
+      )
+      this.isShowInput = false
       if (res.Code === 0) {
         const toast = this.$createToast({
-          txt: "评论成功",
-          type: "txt",
+          txt: '评论成功',
+          type: 'txt',
           onTimeout: () => {
-            this.commentCount = this.commentCount + 1;
-            this.getCommentData();
-          }
-        });
-        toast.show();
+            this.commentCount = this.commentCount + 1
+            this.getCommentData()
+          },
+        })
+        toast.show()
       } else {
         toast = this.$createToast({
           txt: res.Msg,
-          type: "txt"
-        });
-        toast.show();
+          type: 'txt',
+        })
+        toast.show()
       }
-      console.log(res);
+      console.log(res)
     },
     handleCancelComment() {
-      this.isShowInput = false;
+      this.isShowInput = false
     },
     handleAddCommit() {
-      this.isShowInput = true;
+      this.isShowInput = true
     },
     handleRereshAllComment() {
-      this.getCommentData();
+      this.getCommentData()
     },
     async handleLoadMoreComment(scroll) {
       if (this.commentLoaded) {
-        scroll.forceUpdate();
-        return;
+        scroll.forceUpdate()
+        return
       }
-      const result = await getComment(this.postId, this.lastCommentId);
+      const result = await getComment(this.postId, this.lastCommentId)
       if (result.Code === 0 && result.Data.length) {
         this.allComments = this.allComments.concat(
           this._formatComment(result.Data)
-        );
+        )
         this.lastCommentId = this.allComments[
           this.allComments.length - 1
-        ].commentId;
+        ].commentId
       } else {
-        this.commentLoaded = true;
+        this.commentLoaded = true
         // 如果没有新数据
-        scroll.forceUpdate();
+        scroll.forceUpdate()
       }
     },
     handleShowAllComment() {
-      this.isShowAllComment = true;
+      this.isShowAllComment = true
     },
     async getDetailData(postId) {
-      const result = await getDetail(postId);
+      const result = await getDetail(postId)
       if (result.Code === 0) {
-        this.postDetail = new PostInfo(result.Data);
-        console.log(this.postDetail);
-        this.commentCount = this.postDetail.commentCount;
-        this.getCommentData();
+        this.postDetail = new PostInfo(result.Data)
+        console.log(this.postDetail)
+        this.commentCount = this.postDetail.commentCount
+        this.getCommentData()
+
+        this.getRecommend()
       }
     },
     async getCommentData() {
-      this.lastCommentId = 0;
-      const result = await getComment(this.postId, this.lastCommentId);
+      this.lastCommentId = 0
+      const result = await getComment(this.postId, this.lastCommentId)
       if (result.Code === 0) {
-        this.hotComment = this._formatComment(result.Data.slice(0, 3));
-        this.allComments = this._formatComment(result.Data);
+        this.hotComment = this._formatComment(result.Data.slice(0, 3))
+        this.allComments = this._formatComment(result.Data)
         this.lastCommentId = this.allComments[
           this.allComments.length - 1
-        ].commentId;
+        ].commentId
       }
     },
     _formatComment(data) {
-      return data.map(item => {
+      return data.map((item) => {
         if (item.respondent.user !== null) {
-          item.isRes = true;
+          item.isRes = true
         } else {
-          item.isRes = false;
+          item.isRes = false
         }
-        return new Comment(item);
-      });
-    }
-  }
-};
+        return new Comment(item)
+      })
+    },
+  },
+}
 </script>
 
 <style lang="scss" scope>
@@ -518,14 +562,31 @@ export default {
     }
   }
 
-  .content-scroll-wrapper {
+  .comment_scroll_wrapper {
     flex: 1;
     background: #fff;
     width: 100%;
     height: calc(100% - 98px);
     position: relative;
 
-    .content-scroll-list-wrap {
+    .comment_scroll_list_wrapper {
+      height: 100%;
+      transform: rotate(0deg); // fix 子元素超出边框圆角部分不隐藏的问题
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      overflow: hidden;
+    }
+  }
+
+  .detail_scroll_wrapper {
+    flex: 1;
+    background: #fff;
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    .detail_scroll_list_wrapper {
       height: 100%;
       transform: rotate(0deg); // fix 子元素超出边框圆角部分不隐藏的问题
       position: absolute;

@@ -5,7 +5,9 @@
       <div class="nav_scroll_list_wrap">
         <cube-scroll ref="navScroll" direction="horizontal">
           <ul class="nav-wrapper">
-            <li v-for="(item, index) in navTxts" :key="index" class="nav-item">{{ item }}</li>
+            <li v-for="(item, index) in navTxts" :key="index" class="nav-item">
+              {{ item }}
+            </li>
           </ul>
         </cube-scroll>
         <!-- <div class="more-wrapper">
@@ -44,11 +46,13 @@
                   <!-- <img :style="{height: `${(750 * item.post.conver_image_height / item.post.conver_image_width)}px`}" class="cover_img" :src="item.post.conver_url" alt="" /> -->
                   <span class="play_count">{{ item.post.play_count }}次</span>
                   <span class="play_duration">
-                    {{
-                    item.post.play_duration
-                    }}
+                    {{ item.post.play_duration | formateDuration }}
                   </span>
-                  <img src="../../assets/img/icon_play@2x.png" alt class="icon_play" />
+                  <img
+                    src="../../assets/img/icon_play@2x.png"
+                    alt
+                    class="icon_play"
+                  />
                 </div>
                 <div class="item_bottom">
                   <img class="avatar" :src="item.user.user_icon" alt />
@@ -92,7 +96,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-import CubePage from "../base/CubePage";
+import CubePage from "../base/CubePage"
+import { formateSeconds } from '../../common/utils'
 
 export default {
   components: {
@@ -106,6 +111,11 @@ export default {
     navTxts: {
       type: Array,
       default: []
+    }
+  },
+  filters: {
+    formateDuration(value) {
+      return formateSeconds(value)
     }
   },
   data() {
@@ -323,6 +333,8 @@ export default {
         border-radius: 18px;
         background-color: rgba($color: #000000, $alpha: 0.5);
         padding: 0 12px;
+        color: #fff;
+        font-size: 20px;
         z-index: 2;
       }
 

@@ -46,6 +46,7 @@ export class PostInfo {
   public uid: number
   public popularize: number
   public requestId: string
+  public playDuration: number
 
   constructor(postDetail: PostDetail) {
     this.postId = postDetail.post.post_id
@@ -53,6 +54,7 @@ export class PostInfo {
     this.content = postDetail.post.content
     this.converUrl = postDetail.post.conver_url
     this.playUrl = postDetail.post.play_url
+    this.playDuration = postDetail.post.play_duration
     this.isClickedLike = postDetail.post.is_clicked_like === 0 ? false : true
     this.isRelease = postDetail.post.is_release
     this.likeCount = postDetail.post.like_count

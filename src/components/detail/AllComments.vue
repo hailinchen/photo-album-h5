@@ -8,7 +8,11 @@
     @pulling-up="onPullingUp"
   >
     <ul>
-      <li v-for="item in allComments" :key="item.commentId" @click.stop="answerCommit(item.commentId)">
+      <li
+        v-for="item in allComments"
+        :key="item.commentId"
+        @click.stop="answerCommit(item.commentId)"
+      >
         <img class="item_l" :src="item.avatar" alt />
         <div class="item_r">
           <div class="item_name">{{ item.name }}</div>
@@ -17,7 +21,11 @@
       </li>
     </ul>
     <template slot="pulldown" slot-scope="props">
-      <div v-if="props.pullDownRefresh" class="cube-pulldown-wrapper" :style="props.pullDownStyle">
+      <div
+        v-if="props.pullDownRefresh"
+        class="cube-pulldown-wrapper"
+        :style="props.pullDownStyle"
+      >
         <div
           v-if="props.beforePullDown"
           class="before-trigger"
@@ -37,12 +45,12 @@
 
 <script>
 export default {
-  name: "AllComments",
+  name: 'AllComments',
   props: {
     allComments: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
   data() {
     return {
@@ -51,37 +59,37 @@ export default {
           threshold: 60,
           // stop: 44,
           stopTime: 1000,
-          txt: "更新成功"
+          txt: '更新成功',
         },
         pullUpLoad: {
           threshold: 0,
           txt: {
-            more: "上滑加载更多",
-            noMore: "已显示全部评论"
+            more: '上滑加载更多',
+            noMore: '已显示全部评论',
           },
-          visible: true
-        }
+          visible: true,
+        },
       },
       secondStop: 26,
       scroll: null,
-    };
+    }
   },
   methods: {
     answerCommit(parentId) {
-      this.$emit("atComment", parentId);
+      this.$emit('atComment', parentId)
     },
     onPullingDown() {
-      console.log("下拉刷新");
-      this.$emit("refreshAllComment");
+      console.log('下拉刷新')
+      this.$emit('refreshAllComment')
     },
     onPullingUp() {
-      this.$emit("loadMoreComment", this.scroll);
-    }
+      this.$emit('loadMoreComment', this.scroll)
+    },
   },
   mounted() {
-    this.scroll = this.$refs.commentScroll;
-  }
-};
+    this.scroll = this.$refs.commentScroll
+  },
+}
 </script>
 
 <style lang="scss" scoped>

@@ -154,3 +154,18 @@ export const illegalFilter = (str: string) => {
   }
   return true
 }
+
+
+export const formateSeconds = (s: number) => {
+  if (s > 0) {
+    const hour = Math.floor(s / 3600)
+    const min = Math.floor(s / 60) % 60
+    const sec = s % 60
+    const hourStr = hour >= 10 ? hour : '0' + hour
+    const minStr = min >= 10 ? min : '0' + min
+    const secStr = sec >= 10 ? sec : '0' + sec
+    return hourStr > 0 ? hourStr + ":" + minStr + ":" + secStr : minStr + ":" + secStr
+  } else {
+    return '00:00'
+  }
+}
