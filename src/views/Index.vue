@@ -1,15 +1,12 @@
 <template>
-  <div class="home">
-    <!-- <Header /> -->
-    <div class="main" ref="table">
-      <FeedList
-        v-if="feedList.length"
-        :feedList="feedList"
-        :navTxts="navTxts"
-        @onPullingUp="onPullingUp"
-        @onPullingDown="onPullingDown"
-      />
-    </div>
+  <div class="main" ref="table">
+    <FeedList
+      v-if="feedList.length"
+      :feedList="feedList"
+      :navTxts="navTxts"
+      @onPullingUp="onPullingUp"
+      @onPullingDown="onPullingDown"
+    />
   </div>
 </template>
 

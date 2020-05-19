@@ -10,7 +10,7 @@
       ></i>
     </header>
 
-    <div class="wrapper">
+    <div class="wrapper" :class="{'show_tab': showTabbar, 'no_tab': !showTabbar}">
       <section class="desc" v-show="desc">
         <slot name="desc">{{ desc }}</slot>
       </section>
@@ -58,6 +58,10 @@ export default {
       type: String,
       default: '#484848',
     },
+    showTabbar: {
+      type: Boolean,
+      default: true,
+    }
   },
   methods: {
     back() {
@@ -109,6 +113,9 @@ export default {
     overflow-x: hidden;
     overflow-y: auto;
     height: calc(100% - 98px);
+
+    &.show_tab {}
+    &.no_tab {}
     .desc {
       padding: 10px;
       margin: 10px 0;

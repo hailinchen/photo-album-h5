@@ -27,7 +27,7 @@ export default {
           path: '/',
         },
         {
-          label: '特效相册',
+          label: '制作特效相册',
           icon: 'iconfont icon-add',
           path: '/album',
         },
@@ -41,11 +41,12 @@ export default {
   },
   mounted() {
     const path = this.$route.path
-    console.log(this.$route)
+    // console.log(this.$route)
     this.selectedLabel = path
   },
   methods: {
     clickHandler(path) {
+      // console.log(path)
       if (path === this.selectedLabel) {
         return
       }

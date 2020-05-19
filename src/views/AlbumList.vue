@@ -1,51 +1,57 @@
 <template>
-  <cube-page
-    type="scroll-view"
-    class="album_models"
-    title="特效相册"
-    titleBgColor="ffffff"
-    titleColor="#212121"
-  >
-    <template slot="content">
-      <div class="content_scroll_wrapper">
-        <div class="content_scroll_list_wrap" ref="scrollWrapper">
-          <cube-scroll
-            ref="contentScroll"
-            :data="modelList"
-            :options="options"
-            @pulling-down="onPullingDown"
-            @pulling-up="onPullingUp"
-          >
-            <div class="product_btn">
-              <img src="../assets/img/icon_add_circle@2x.png" alt="" />
-              <p>制作相册</p>
-            </div>
-            <h2 class="list_title">相册模板</h2>
-            <album-models :list="modelList" @selectModel="handleClickModel" />
-
-            <template slot="pulldown" slot-scope="props">
-              <div
-                v-if="props.pullDownRefresh"
-                class="cube-pulldown-wrapper"
-                :style="props.pullDownStyle"
-              >
-                <div
-                  v-if="props.beforePullDown"
-                  class="before-trigger"
-                  :style="{ paddingTop: props.bubbleY + 'px' }"
-                >
-                  <span :class="{ rotate: props.bubbleY > 0 }">↓</span>
-                </div>
+  <div class="main">
+    <cube-page
+      type="scroll-view"
+      class="album_models"
+      title="特效相册"
+      titleBgColor="ffffff"
+      titleColor="#212121"
+    >
+      <template slot="content">
+        <div class="content_scroll_wrapper">
+          <div class="content_scroll_list_wrap" ref="scrollWrapper">
+            <cube-scroll
+              ref="contentScroll"
+              :data="modelList"
+              :options="options"
+              @pulling-down="onPullingDown"
+              @pulling-up="onPullingUp"
+            >
+              <div class="product_btn">
+                <img src="../assets/img/icon_add_circle@2x.png" alt="" />
+                <p>制作相册</p>
               </div>
-            </template>
-          </cube-scroll>
+              <h2 class="list_title">相册模板</h2>
+              <album-models :list="modelList" @selectModel="handleClickModel" />
+
+              <template slot="pulldown" slot-scope="props">
+                <div
+                  v-if="props.pullDownRefresh"
+                  class="cube-pulldown-wrapper"
+                  :style="props.pullDownStyle"
+                >
+                  <div
+                    v-if="props.beforePullDown"
+                    class="before-trigger"
+                    :style="{ paddingTop: props.bubbleY + 'px' }"
+                  >
+                    <span :class="{ rotate: props.bubbleY > 0 }">↓</span>
+                  </div>
+                </div>
+              </template>
+            </cube-scroll>
+          </div>
         </div>
-      </div>
-      <!-- S - 预览模板 -->
-      <preview-model v-if="isShowPreview" :previewInfo="selectedModel" @closePreview="handleClosePreview" />
-      <!-- E - 预览模板 -->
-    </template>
-  </cube-page>
+        <!-- S - 预览模板 -->
+        <preview-model
+          v-if="isShowPreview"
+          :previewInfo="selectedModel"
+          @closePreview="handleClosePreview"
+        />
+        <!-- E - 预览模板 -->
+      </template>
+    </cube-page>
+  </div>
 </template>
 
 <script>
@@ -122,12 +128,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.main {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 98px;
+}
+
 .content_scroll_wrapper {
   position: absolute;
   width: 100%;
-  height: calc(100% - 98px);
-  transform: rotate(0deg);
-  bottom: 98px;
+  height: 100%;
 
   .content_scroll_list_wrap {
     width: 100%;
