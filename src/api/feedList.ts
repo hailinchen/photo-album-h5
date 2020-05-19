@@ -1,5 +1,5 @@
 import Request from '../common/request'
-const baseURL = '/V1/mini2'
+import { baseURL } from './config'
 
 interface FeedOptions {
   ctype?: number

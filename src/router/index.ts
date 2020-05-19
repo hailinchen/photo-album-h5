@@ -7,20 +7,20 @@ Vue.use(VueRouter)
 const routes: RouteConfig[] = [
   {
     path: '/',
-    redirect: '/index'
-  },
-  {
-    path: '/index',
-    name: 'Home',
-    component: () => import('../views/Home.vue'),
+    name: 'Index',
+    component: () => import('../views/Index.vue'),
     meta: {
       keepAlive: true,
+      showFooter: true,
     },
   },
   {
     path: '/postDetail/:id',
     name: 'PostDetail',
     component: () => import('../views/PostDetail.vue'),
+    meta: {
+      showFooter: false
+    }
   },
   {
     path: '/album',
@@ -28,6 +28,7 @@ const routes: RouteConfig[] = [
     component: () => import('../views/AlbumList.vue'),
     meta: {
       keepAlive: true,
+      showFooter: true,
     },
   },
   {
@@ -36,6 +37,7 @@ const routes: RouteConfig[] = [
     component: () => import('../views/My.vue'),
     meta: {
       keepAlive: true,
+      showFooter: true,
     },
   }
 ]
@@ -46,6 +48,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   Vue.prototype.beforeRouter = from
+  console.log(to)
   next()
 })
 

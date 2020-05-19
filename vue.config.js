@@ -26,13 +26,20 @@ module.exports = {
     https: false, // 使用https提供服务
     // 这里写你调用接口的基础路径，来解决跨域，如果设置了代理，那你本地开发环境的axios的baseUrl要写为 '' ，即空字符串
     proxy: {
-      '/': {
-        target: 'https://api.tapai.tv',
+      '/V1/': {
+        target: 'https://api.tapai.tv', // https://api.tapai.tv
         changeOrigin: true,
         // ws: true,
         // pathRewrite: {
         //   '^/api': ''
         // }
+      },
+      '/api/': {
+        target: 'https://album-dev.tapai.tv',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api/': '/'
+        }
       },
     },
   },

@@ -45,11 +45,11 @@
                   <h2>{{ item.post.title }}</h2>
                   <!-- <img :style="{height: `${(750 * item.post.conver_image_height / item.post.conver_image_width)}px`}" class="cover_img" :src="item.post.conver_url" alt="" /> -->
                   <span class="play_count">{{ item.post.play_count }}次</span>
-                  <span class="play_duration">
-                    {{ item.post.play_duration | formateDuration }}
-                  </span>
+                  <span class="play_duration">{{
+                    item.post.play_duration | formateDuration
+                  }}</span>
                   <img
-                    src="../../assets/img/icon_play@2x.png"
+                    src="../assets/img/icon_play@2x.png"
                     alt
                     class="icon_play"
                   />
@@ -66,7 +66,7 @@
                     <span class="count">{{ item.post.comment_count }}</span>
                   </div>
                   <button class="share">
-                    <img src="../../assets/img/icon_home_share@2x.png" alt />
+                    <img src="../assets/img/icon_home_share@2x.png" alt />
                   </button>
                 </div>
               </li>
@@ -96,8 +96,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-import CubePage from "../base/CubePage"
-import { formateSeconds } from '../../common/utils'
+import CubePage from '../components/base/CubePage'
+import { formateSeconds } from '../common/utils'
 
 export default {
   components: {
@@ -115,7 +115,7 @@ export default {
   },
   filters: {
     formateDuration(value) {
-      return formateSeconds(value)
+      return formateSeconds(value);
     }
   },
   data() {
@@ -133,18 +133,18 @@ export default {
   },
   methods: {
     goDetail(postId) {
-      this.$router.push("/postDetail/" + postId);
+      this.$router.push('/postDetail/' + postId)
     },
     onPullingDown() {
-      this.$emit("onPullingDown");
+      this.$emit('onPullingDown')
     },
     onPullingUp() {
-      this.$emit("onPullingUp");
+      this.$emit('onPullingUp')
     }
   },
   mounted() {
-    const contentScroll = this.$refs.contentScroll;
-    contentScroll.beforePullDown && contentScroll.refresh();
+    const contentScroll = this.$refs.contentScroll
+    contentScroll.beforePullDown && contentScroll.refresh()
   }
 };
 </script>

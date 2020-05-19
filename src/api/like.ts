@@ -5,7 +5,7 @@ import Request from '../common/request'
  * @param postId 帖子id
  */
 export function postLike(postId: number) {
-  return Request.postForm(`/V1/Like`, { vod_id: postId })
+  return Request.postForm(`/Like`, { vod_id: postId })
 }
 
 /**
@@ -13,5 +13,5 @@ export function postLike(postId: number) {
  * @param postId 帖子id
  */
 export function postCancelLike(postId: number) {
-  return Request.delete(`/V1/Like`, { vod_id: postId })
+  return Request.delete(`/Like`, { vod_id: postId })
 }

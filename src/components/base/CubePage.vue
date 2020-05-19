@@ -1,7 +1,7 @@
 <template>
   <div class="cube-page" :class="type">
     <header class="header" :style="{ backgroundColor: titleBgColor }">
-      <h1>{{ title }}</h1>
+      <h1 :style="{ color: titleColor }">{{ title }}</h1>
       <i
         v-if="isBack"
         @click="back"
@@ -45,6 +45,10 @@ export default {
     titleBgColor: {
       type: String,
       default: '#D43D3D',
+    },
+    titleColor: {
+      type: String,
+      default: '#ffffff'
     },
     isBack: {
       type: Boolean,

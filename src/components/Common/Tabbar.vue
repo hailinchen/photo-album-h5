@@ -19,12 +19,12 @@
 export default {
   data() {
     return {
-      selectedLabel: '/index',
+      selectedLabel: '/',
       tabs: [
         {
           label: '首页',
           icon: 'iconfont icon-home',
-          path: '/index',
+          path: '/',
         },
         {
           label: '特效相册',
@@ -40,35 +40,17 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$route)
     const path = this.$route.path
-    console.log(path)
+    console.log(this.$route)
     this.selectedLabel = path
   },
   methods: {
     clickHandler(path) {
-      // console.log(label)
-      console.log(path === this.$route.path)
       if (path === this.selectedLabel) {
         return
       }
       this.selectedLabel = path
       this.$router.push(path)
-    },
-    changeHandle(value) {
-      // console.log(value)
-      // if (value === this.selectedLabelDefault) {
-      //   return
-      // }
-      // this.selectedLabelDefault = value
-      // console.log('===tabbar===', value)
-      // if (value === 'album') {
-      //   this.$router.push('/album')
-      // } else if (value === 'my') {
-      //   this.$router.push('/my')
-      // } else if (value === 'index') {
-      //   this.$router.push('/')
-      // }
     },
   },
 }
